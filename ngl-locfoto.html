@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Spaceman Invictus — Lacak Lokasi via Foto + NGL</title>
+  <link rel="stylesheet" href="asset/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <style>
+  /* ==== AppBar Quick Menu Drawer ==== */
+  .qm-overlay{position:fixed;inset:0;display:none;background:rgba(10,8,18,.55);backdrop-filter:blur(6px);z-index:120}
+  .qm-overlay.active{display:block}
+  .qm-drawer{position:fixed;left:0;top:0;height:100vh;width:min(84vw,320px);background:#0f0b1a;border-right:1px solid #2a2343;box-shadow:0 10px 40px rgba(0,0,0,.45);transform:translateX(-102%);transition:transform .22s ease;z-index:121}
+  .qm-drawer.active{transform:translateX(0)}
+  .qm-head{padding:16px;border-bottom:1px solid #201a34;font-weight:900;letter-spacing:.6px;color:#eae6ff}
+  .qm-list{padding:12px}
+  .qm-item{display:flex;align-items:center;gap:12px;margin:10px 0;padding:12px 14px;border-radius:14px;border:1px solid rgba(166,77,242,.22);background:linear-gradient(135deg,#2a2142,#1a1530);color:#eae6ff;text-decoration:none;font-weight:700}
+  .qm-item i{width:36px;height:36px;border-radius:12px;background:#1f1938;border:1px solid #2d2557;display:grid;place-items:center}
+  .qm-close{position:absolute;right:10px;top:10px;width:38px;height:38px;border-radius:12px;border:1px solid #2a2343;background:#17122b;color:#fff;display:grid;place-items:center;cursor:pointer}
+  .appbar{position:sticky;top:0;z-index:200;background:#120f1c;border-bottom:1px solid #251e3b;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;color:#eae6ff}
+  .appbar .app-title{cursor:pointer;padding:8px 12px;border-radius:10px;font-weight:800;letter-spacing:.6px}
+  .appbar .app-title b{color:#a64df2}
+  .appbar .app-title:hover{background:#1a1430}
+  .iconbtn{width:40px;height:40px;border-radius:12px;background:#1c1730;border:1px solid #29224b;color:#eae6ff;display:grid;place-items:center}
+</style>
+</head>
+<body>
+  <!-- APPBAR -->
+  <header class="appbar">
+  <div class="iconbtn"><i class="fa-solid fa-bolt"></i></div> <!-- boleh ganti ikon -->
+  <div class="title app-title" id="appTitle">SPACEMAN INVICTUS <b>V1</b></div>
+  <button class="iconbtn" id="qmMore" aria-label="Quick Menu"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+</header>
+
+  <!-- NEWS SLIDER -->
+  <div id="newsSlider" class="slider"></div>
+  
+  <!-- Quick Menu Drawer -->
+<div class="qm-overlay" id="qmOverlay"></div>
+<aside class="qm-drawer" id="qmDrawer" aria-hidden="true">
+  <button class="qm-close" id="qmClose" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+  <div class="qm-head">SPACEMAN INVICTUS <b>V1</b></div>
+  <nav class="qm-list">
+    <a class="qm-item" href="/dashboard"><i class="fa-solid fa-house"></i><span>Bug Dashboard</span></a>
+    <a class="qm-item" href="/ddos-dashboard"><i class="fa-solid fa-bolt"></i><span>DDoS Panel</span></a>
+    <a class="qm-item" href="/tracking.html"><i class="fa-solid fa-map-location-dot"></i><span>Tracking Akurat</span></a>
+  </nav>
+</aside>
+
+  <!-- LACAK FOTO -->
+  <section class="card">
+    <h2><i class="fa-solid fa-magnifying-glass"></i> Detail Foto & Lacak Lokasi</h2>
+    <div class="form-group">
+      <label for="photo">Pilih foto (JPEG/JPG/PNG)</label>
+      <input id="photo" type="file" accept="image/jpeg,image/jpg,image/png"/>
+    </div>
+    <button id="btnExtract" class="btn">Analisa Foto</button>
+    <div id="photoResult" class="result"></div>
+
+    <section id="previewSection" style="display:none;margin-top:14px">
+      <h3 style="margin:14px 0 8px">Preview & Metadata</h3>
+      <div style="display:flex;gap:16px;align-items:flex-start;flex-wrap:wrap">
+        <img id="thumbImg" class="thumb" alt="thumbnail"/>
+        <div style="flex:1;min-width:260px">
+          <div id="exifSummary" class="exif-grid"></div>
+          <div id="exifRaw" style="margin-top:8px"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="mapSection" style="display:none;margin-top:14px">
+      <h3 style="margin:14px 0 8px">Lokasi (jika ada)</h3>
+      <div id="map"></div>
+      <p id="gpsText" style="margin-top:6px"></p>
+    </section>
+  </section>
+
+  <!-- NGL -->
+  <section class="card">
+    <h3 style="margin:0 0 8px"><i class="fa-solid fa-envelope"></i> NGL LAMMER</h3>
+    <form id="nglFormNew">
+      <div class="form-group">
+        <label for="nglUser2">Username NGL (tanpa @)</label>
+        <input id="nglUser2" type="text" required/>
+      </div>
+      <div class="form-group">
+        <label for="nglText2">Pesan</label>
+        <input id="nglText2" type="text" required/>
+      </div>
+      <div class="form-group">
+        <label for="nglTimes2">Jumlah</label>
+        <input id="nglTimes2" type="number" value="1" min="1" max="1000"/>
+      </div>
+      <input type="hidden" id="foundLat"/>
+      <input type="hidden" id="foundLon"/>
+      <div id="nglResultNew" class="result"></div>
+      <button id="nglBtnNew" class="btn" type="submit">Kirim ke NGL</button>
+    </form>
+  </section>
+
+  <!-- MUSIC CONTROL -->
+  <audio id="backgroundMusic" preload="auto" loop>
+    <source src="asset/mg.mp3" type="audio/mpeg">
+  </audio>
+  <button id="musicToggle" class="music-control" title="Play/Pause Music">
+    <i class="fa-solid fa-play" id="musicIcon"></i>
+  </button>
+
+  <!-- JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+  	function specialThanksV2(opts){
+  const KEY = 'stx_'+(opts?.key||'default');
+  if (!opts?.always && sessionStorage.getItem(KEY)) return;
+
+  const o = document.createElement('div');
+  o.className = 'stx-overlay';
+  o.innerHTML = `
+    <div class="stx-card" role="dialog" aria-label="Special Thanks">
+      <div class="stx-head">
+        <div class="stx-title"><i class="fa-solid fa-award"></i>${opts.title||'Special Thanks'}</div>
+        <button class="stx-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="stx-body">
+        ${opts.message||''}
+        ${Array.isArray(opts.items)&&opts.items.length?`
+          <div class="stx-list">
+            ${opts.items.map(t=>`
+              <div class="stx-item">
+                ${t.icon?`<i class="fa-solid ${t.icon}"></i>`:''}
+                <div>${t.text||''}</div>
+              </div>`).join('')}
+          </div>`:''}
+        ${Array.isArray(opts.cta)&&opts.cta.length?`
+          <div class="stx-cta">
+            ${opts.cta.map(c=>`
+              <a class="stx-btn ${c.ghost?'stx-btn--ghost':''}" ${c.href?`href="${c.href}" target="_blank" rel="noopener"`:''}>
+                ${c.icon?`<i class="fa-solid ${c.icon}"></i>`:''}${c.text||''}
+              </a>`).join('')}
+          </div>`:''}
+      </div>
+    </div>`;
+  document.body.appendChild(o);
+
+  const close = () => { o.style.display='none'; o.remove(); sessionStorage.setItem(KEY,'1'); };
+  o.querySelector('.stx-close').addEventListener('click', close);
+  o.addEventListener('click', e=>{ if(e.target===o) close(); });
+
+  o.style.display = 'flex';
+  if (opts.timeout) setTimeout(close, Number(opts.timeout));
+}
+
+specialThanksV2({
+  key: 'thanks-global',
+  title: 'Special Thanks',
+  message: 'Terima kasih untuk dukungan & kontribusi yang membuat panel ini berjalan.',
+  items: [
+    { icon:'fa-crown', text:'Vinzz', href:'https://t.me/vinzznyabobo' },
+    { icon:'fa-solid fa-people-group', text:'Spaceman invictus' },
+    { icon:'fa-solid fa-person', text:', Vann (beban)', href:'https://t.me/vann4you1' },
+    { icon:'fa-people-group', text:'All Contributors & Buyers' }
+  ],
+  cta: [
+    { icon:'fa-paper-plane', text:'Telegram Channel', href:'https://t.me/spcinformation' },
+    { icon:'fa-crown', text:'Contact Owner', href:'https://t.me/vinzznyabobo', ghost:true }
+  ],
+  timeout: 5000
+});
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // ==== Ambil elemen ====
+    const photo=document.getElementById('photo');
+    const btnExtract=document.getElementById('btnExtract');
+    const photoResult=document.getElementById('photoResult');
+    const previewSection=document.getElementById('previewSection');
+    const thumbImg=document.getElementById('thumbImg');
+    const exifSummary=document.getElementById('exifSummary');
+    const exifRaw=document.getElementById('exifRaw');
+    const mapSection=document.getElementById('mapSection');
+    const gpsText=document.getElementById('gpsText');
+    const foundLat=document.getElementById('foundLat');
+    const foundLon=document.getElementById('foundLon');
+
+    const nglFormNew=document.getElementById('nglFormNew');
+    const nglUser2=document.getElementById('nglUser2');
+    const nglText2=document.getElementById('nglText2');
+    const nglTimes2=document.getElementById('nglTimes2');
+    const nglBtnNew=document.getElementById('nglBtnNew');
+    const nglResultNew=document.getElementById('nglResultNew');
+
+    const musicToggle=document.getElementById('musicToggle');
+    const backgroundMusic=document.getElementById('backgroundMusic');
+    const musicIcon=document.getElementById('musicIcon');
+
+    const token=localStorage.getItem('authToken');
+    
+    // ==== Helper ====
+    function getDeviceId(){
+      const KEY='device_id';
+      let id=localStorage.getItem(KEY);
+      if(!id){ id=crypto.randomUUID(); localStorage.setItem(KEY,id); }
+      return id;
+    }
+    function showResult(id,msg,type='success'){
+      const el=document.getElementById(id);
+      el.innerText=msg;
+      el.className='result '+(type==='success'?'success':'error');
+      el.style.display='block';
+      setTimeout(()=>{el.style.display='none';},8000);
+    }
+
+    // ==== Map ====
+    let map,marker;
+    function initMap(){
+      if(map) return;
+      map=L.map('map',{zoomControl:true}).setView([0,0],2);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap'}).addTo(map);
+      marker=L.marker([0,0],{draggable:true}).addTo(map);
+      marker.on('dragend', e=>{
+        const p=e.target.getLatLng();
+        foundLat.value=p.lat;
+        foundLon.value=p.lng;
+        gpsText.innerText=`Lat: ${p.lat.toFixed(6)}, Lon: ${p.lng.toFixed(6)} (dipilih manual)`;
+      });
+    }
+
+    // ==== Analisa Foto ====
+    btnExtract.addEventListener('click', async ()=>{
+      if(!photo.files?.length){ showResult('photoResult','Pilih foto dulu','error'); return; }
+      const form=new FormData(); form.append('photo',photo.files[0]);
+      let res;
+      try {
+        res=await fetch('/api/photo/location',{
+          method:'POST',
+          headers:{'Authorization':`Bearer ${token||''}`,'X-Device-Id':localStorage.getItem('device_id')||getDeviceId()},
+          body:form
+        });
+      } catch(e){
+        showResult('photoResult','Gagal terhubung ke server','error'); return;
+      }
+      if(res.status===403){ showResult('photoResult','Akun ini terikat ke device lain.','error'); return;}
+      if(res.status===423){ showResult('photoResult','Device belum terikat. Silakan login ulang.','error'); location.href='/'; return;}
+      if(res.status===401||res.status===400){ showResult('photoResult','Sesi tidak valid. Silakan login ulang.','error'); location.href='/'; return;}
+      if(res.status===440){ showResult('photoResult','Sesi kedaluwarsa. Silakan login ulang.','error'); localStorage.removeItem('authToken'); location.href='/'; return; }
+      if(!res.ok){ showResult('photoResult','Gagal analisa (status '+res.status+')','error'); return; }
+
+      const data=await res.json();
+
+// CEK apakah metadata kosong
+if (!data.exif || !data.exif.raw) {
+  showResult('photoResult', 'Metadata tidak ditemukan (mungkin foto dari chat/screenshot). Kamu bisa geser pin di peta untuk pilih lokasi manual.', 'error');
+}
+
+// tampilkan preview & ringkasan
+previewSection.style.display='block';
+thumbImg.src=data.exif?.thumbnailBase64
+  ? `data:image/jpeg;base64,${data.exif.thumbnailBase64}`
+  : URL.createObjectURL(photo.files[0]);
+
+      exifSummary.innerHTML='';
+      const add=(k,v)=>{const d=document.createElement('div');d.className='k-v';d.innerHTML=`<div class="k">${k}</div><div>${(v??'')||'—'}</div>`;exifSummary.appendChild(d);};
+      const ex=data.exif||{};
+      add('Tanggal (ISO)',ex.dateTaken);
+      add('Camera Make',ex.camera?.make);
+      add('Camera Model',ex.camera?.model);
+      add('Software',ex.camera?.software);
+      add('ExposureTime',ex.exposure?.exposureTime);
+      add('Aperture (FNumber)',ex.exposure?.fNumber);
+      add('ISO',ex.exposure?.iso);
+      add('FocalLength',ex.exposure?.focalLength);
+      add('FocalLength(35mm)',ex.exposure?.focalLengthIn35mm);
+      add('Flash fired',ex.flash?.flashUsed===true?'Ya':(ex.flash?.flashUsed===false?'Tidak':'—'));
+      add('Orientation',ex.orientation);
+      add('Image Size',(ex.imageSize?.width&&ex.imageSize?.height)?`${ex.imageSize.width} × ${ex.imageSize.height}`:'—');
+
+      exifRaw.innerHTML='<h4>Raw Tags</h4><pre style="white-space:pre-wrap;max-height:220px;overflow:auto;background:#0f0b1a;border:1px solid #2a2250;padding:8px;border-radius:8px">'+
+        (ex.raw?JSON.stringify(ex.raw,null,2):'—')+'</pre>';
+
+      // peta
+      mapSection.style.display='block';
+      initMap();
+      if(data.gps && !isNaN(data.gps.lat) && !isNaN(data.gps.lon)){
+        const lat=Number(data.gps.lat), lon=Number(data.gps.lon);
+        marker.setLatLng([lat,lon]); map.setView([lat,lon],15);
+        foundLat.value=lat; foundLon.value=lon;
+        gpsText.innerText=`Lat: ${lat.toFixed(6)}, Lon: ${lon.toFixed(6)} (dari metadata)`;
+      } else {
+        map.setView([0,0],2); marker.setLatLng([0,0]);
+        foundLat.value=''; foundLon.value='';
+        gpsText.innerText='Tidak ada GPS di metadata. Geser pin untuk pilih lokasi manual.';
+      }
+      showResult('photoResult','Analisa metadata selesai','success');
+    });
+
+    // ==== NGL ====
+    nglFormNew.addEventListener('submit', async e=>{
+      e.preventDefault();
+      const u=nglUser2.value.trim(), t=nglText2.value.trim(), times=Number(nglTimes2.value)||1;
+      const btn=nglBtnNew, old=btn.innerHTML; btn.disabled=true; btn.innerHTML='Mengirim...';
+      try{
+        const payload={username:u,text:t,times};
+        if(foundLat.value&&foundLon.value) payload.location={lat:Number(foundLat.value),lon:Number(foundLon.value)};
+        const res=await fetch('/api/ngl/send',{
+          method:'POST',
+          headers:{'Content-Type':'application/json','Authorization':`Bearer ${token||''}`,'X-Device-Id':localStorage.getItem('device_id')||getDeviceId()},
+          body:JSON.stringify(payload)
+        });
+        if(res.status===403){ showResult('nglResultNew','Akun ini terikat ke device lain.','error'); return;}
+        if(res.status===423){ showResult('nglResultNew','Device belum terikat. Silakan login ulang.','error'); location.href='/'; return;}   
+        if(res.status===440){ showResult('nglResultNew','Sesi kedaluwarsa. Silakan login ulang.','error'); localStorage.removeItem('authToken'); location.href='/'; return; }
+        if(res.status===401||res.status===400){ showResult('nglResultNew','Sesi tidak valid. Silakan login ulang.','error'); location.href='/'; return;}
+        const data=await res.json(); if(!res.ok||!data.ok) throw new Error(data.error||'Gagal');
+        showResult('nglResultNew',`Berhasil mengirim ${data.sent||'pesan'} ke @${u}`,'success'); nglFormNew.reset();
+      }catch(err){ showResult('nglResultNew','Gagal: '+err.message,'error'); }
+      finally{ btn.disabled=false; btn.innerHTML=old; }
+    });
+
+    // ==== Music ====
+    let isPlaying=(localStorage.getItem('musicPlaying')==='true'); backgroundMusic.volume=0.3;
+    function syncUI(){ if(isPlaying){musicIcon.className='fa-solid fa-pause';musicToggle.classList.add('playing');}else{musicIcon.className='fa-solid fa-play';musicToggle.classList.remove('playing');} }
+    musicToggle.addEventListener('click',()=>{ if(isPlaying){backgroundMusic.pause();isPlaying=false;}else{backgroundMusic.play().catch(()=>{});isPlaying=true;} localStorage.setItem('musicPlaying',isPlaying); syncUI(); });
+    if(isPlaying){ backgroundMusic.play().catch(()=>{}); } syncUI();
+  });
+  
+(function(){
+  const drawer  = document.getElementById('qmDrawer');
+  const overlay = document.getElementById('qmOverlay');
+  const closer  = document.getElementById('qmClose');
+  const openers = document.querySelectorAll('#qmMore,#appTitle'); // kebab & judul
+
+  function open(){ drawer.classList.add('active'); overlay.classList.add('active'); drawer.setAttribute('aria-hidden','false'); }
+  function close(){ drawer.classList.remove('active'); overlay.classList.remove('active'); drawer.setAttribute('aria-hidden','true'); }
+
+  openers.forEach(btn => btn && btn.addEventListener('click', open));
+  overlay?.addEventListener('click', close);
+  closer?.addEventListener('click', close);
+  window.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
+  </script>
+<script src="asset/news.js" defer></script>
+</body>
+</html>

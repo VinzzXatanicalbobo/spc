@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spaceman Invictus - Dashboard</title>
+  <link rel="icon" type="image/x-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJDNi40NzcgMiAyIDYuNDc3IDIgMTJTNi40NzcgMjIgMTIgMjJTMjIgMTcuNTIzIDIyIDEyUzE3LjUyMyAyIDEyIDJaIiBmaWxsPSIjRkY2QjAwIi8+CjxwYXRoIGQ9Ik0xNi4xIDlMMTIgMTMuMUw3LjkgOUw2LjUgMTAuNEwxMiAxNS45TDE3LjUgMTAuNEwxNi4xIDlaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer"/>
+  <link rel="stylesheet" href="asset/style.css">
+
+  <style>
+  /* ==== AppBar Quick Menu Drawer (inline) ==== */
+  .qm-overlay{position:fixed;inset:0;display:none;background:rgba(10,8,18,.55);backdrop-filter:blur(6px);z-index:120}
+  .qm-overlay.active{display:block}
+  .qm-drawer{position:fixed;left:0;top:0;height:100vh;width:min(84vw,320px);background:#0f0b1a;border-right:1px solid #2a2343;box-shadow:0 10px 40px rgba(0,0,0,.45);transform:translateX(-102%);transition:transform .22s ease;z-index:121}
+  .qm-drawer.active{transform:translateX(0)}
+  .qm-head{padding:16px;border-bottom:1px solid #201a34;font-weight:900;letter-spacing:.6px;color:#eae6ff}
+  .qm-list{padding:12px}
+  .qm-item{display:flex;align-items:center;gap:12px;margin:10px 0;padding:12px 14px;border-radius:14px;border:1px solid rgba(166,77,242,.22);background:linear-gradient(135deg,#2a2142,#1a1530);color:#eae6ff;text-decoration:none;font-weight:700}
+  .qm-item i{width:36px;height:36px;border-radius:12px;background:#1f1938;border:1px solid #2d2557;display:grid;place-items:center}
+  .qm-close{position:absolute;right:10px;top:10px;width:38px;height:38px;border-radius:12px;border:1px solid #2a2343;background:#17122b;color:#fff;display:grid;place-items:center;cursor:pointer}
+  .appbar{position:sticky;top:0;z-index:200}
+  .appbar .app-title{cursor:pointer;padding:8px 12px;border-radius:10px}
+  .appbar .app-title:hover{background:#1a1430}
+/* floating toast */
+.stoast {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 18vh;
+  background: linear-gradient(180deg,#2b2542,#1b1530);
+  color: #eae6ff;
+  padding: 12px 18px;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.45);
+  border: 1px solid rgba(166,77,242,.18);
+  z-index: 9999;
+  font-weight:700;
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+}
+.stoast .dot { width:8px;height:8px;border-radius:50%;background:#9b6bfd;display:inline-block;box-shadow:0 0 8px rgba(155,107,253,.45) }
+  </style>
+</head>
+
+<body>
+  <header class="appbar">
+  <div class="iconbtn"><i class="fa-solid fa-bolt"></i></div> <!-- boleh ganti ikon -->
+  <div class="title app-title" id="appTitle">SPACEMAN INVICTUS <b>V1</b></div>
+  <button class="iconbtn" id="qmMore" aria-label="Quick Menu"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+</header>
+
+    <!-- NEWS -->
+    <section class="news-wrap">
+      <div id="newsSlider" class="slider"></div>
+    </section>
+
+    <!-- Profile -->
+    <section class="card">
+      <div class="profile-card">
+        <div class="avatar"></div>
+        <div>
+          <div style="font-weight:800">Welcome, <span id="username">User</span></div>
+          <div style="font-size:12px;color:#b7abda">Role: <span id="userRole">VIP</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Server stats -->
+    <section class="card stats-card">
+      <h4 style="margin:0 0 10px">Server Stats</h4>
+<div><i class="fa-solid fa-user"></i> Online Users: <b id="statUsers">0</b></div>
+<div style="margin-top:6px"><i class="fa-solid fa-paper-plane"></i> Active Sender: <b id="statSender">0</b></div>
+    </section>
+
+    <!-- Form Attack -->
+    <section class="card">
+      <form id="attackForm">
+        <div class="form-group">
+          <label for="target"><i class="fa-solid fa-mobile-alt"></i> Target Number</label>
+          <input type="tel" id="target" class="input" placeholder="628xxxxxxxxx" required>
+        </div>
+        <div class="form-group">
+          <label for="method"><i class="fa-solid fa-meteor"></i> Attack Method</label>
+          <select id="method" class="select" required>
+            <option value="">Select Method</option>
+            <option value="uibug">UI Bug</option>
+            <option value="delay">Delay Attack</option>
+            <option value="ios">iOS Attack</option>
+          </select>
+        </div>
+        <button type="submit" class="btn" id="attackBtn">
+          <i class="fa-solid fa-bolt"></i> LAUNCH ATTACK
+        </button>
+      </form>
+
+      <button id="openChangePw" class="btn" style="margin-top:12px">Ganti Password</button>
+
+      <button type="button" class="btn logout" id="btnLogout" style="margin-top:10px;">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </button>
+
+      <div id="result" class="result" style="display:none"></div>
+    </section>
+  </main>
+
+  <!-- Music -->
+  <audio id="backgroundMusic" loop>
+    <source src="asset/mg.mp3" type="audio/mpeg">
+  </audio>
+  <button id="musicToggle" class="music-control" title="Play/Pause Music">
+    <i class="fa-solid fa-play" id="musicIcon"></i>
+  </button>
+
+  <!-- Modal Ganti Password -->
+  <div id="cp_backdrop" class="cp-backdrop" hidden>
+    <div class="cp-modal">
+      <div class="cp-modal-header">
+        <h3>Ubah Password</h3>
+        <button id="cp_close" class="cp-close" aria-label="Tutup">&times;</button>
+      </div>
+      <div class="cp-modal-body">
+        <div class="form-group"><label>Password Saat Ini</label><input id="cp_current" type="password" placeholder="********" autocomplete="current-password"></div>
+        <div class="form-group"><label>Password Baru</label><input id="cp_new" type="password" placeholder="Min 8 karakter, A-Z, a-z, 0-9" autocomplete="new-password"></div>
+        <div class="form-group"><label>Konfirmasi Password Baru</label><input id="cp_confirm" type="password" placeholder="Ulangi password baru" autocomplete="new-password"></div>
+        <div class="cp-actions">
+          <button id="cp_submit" class="btn"><i class="fa-solid fa-key"></i> Simpan</button>
+          <button id="cp_cancel" class="btn btn-ghost">Batal</button>
+        </div>
+        <div id="cp_msg" class="result" style="display:none;margin-top:8px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Menu Drawer -->
+  <div class="qm-overlay" id="qmOverlay"></div>
+  <aside class="qm-drawer" id="qmDrawer" aria-hidden="true">
+    <button class="qm-close" id="qmClose" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+    <div class="qm-head">SPC <b>V1</b></div>
+    <nav class="qm-list">
+      <a class="qm-item" href="/ddos-dashboard"><i class="fa-solid fa-bolt"></i><span>DDoS Panel</span></a>
+      <a class="qm-item" href="/tracking.html"><i class="fa-solid fa-map-location-dot"></i><span>Tracking Akurat</span></a>
+      <a class="qm-item" href="/ngl-locfoto.html"><i class="fa-solid fa-image"></i><span>Lacak Foto + NGL</span></a>
+    </nav>
+  </aside>
+
+<script>
+// ==================== SPACEMAN INVICTUS V1 — Unified page script (REPLACE HERE) ====================
+// Ini versi aman dan compatible dengan struktur dashboard.html kamu.
+// - Memakai getElementById untuk menghindari reference error
+// - Men-guard pemanggilan loadProfile/loadStats jika belum didefinisikan
+// - Memastikan Quick Menu drawer hanya di-init jika element ada
+// - Tidak mengubah logic server-check (403/423/440) dan response check "200" string
+
+(function(){
+  // ----- Special Thanks (tetap seperti aslinya) -----
+  function specialThanksV2(opts){
+    const KEY='stx_'+(opts?.key||'default');
+    if(!opts?.always && sessionStorage.getItem(KEY)) return;
+    const o=document.createElement('div'); o.className='stx-overlay';
+    o.innerHTML = `
+      <div class="stx-card" role="dialog" aria-label="Special Thanks">
+        <div class="stx-head">
+          <div class="stx-title"><i class="fa-solid fa-award"></i>${opts.title||'Special Thanks'}</div>
+          <button class="stx-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="stx-body">
+          ${opts.message||''}
+          ${Array.isArray(opts.items)&&opts.items.length?`
+            <div class="stx-list">
+              ${opts.items.map(t=>`
+                <div class="stx-item">
+                  ${t.icon?`<i class="fa-solid ${t.icon}"></i>`:''}
+                  <div>${t.text||''}</div>
+                </div>`).join('')}
+            </div>`:''}
+          ${Array.isArray(opts.cta)&&opts.cta.length?`
+            <div class="stx-cta">
+              ${opts.cta.map(c=>`
+                <a class="stx-btn ${c.ghost?'stx-btn--ghost':''}" ${c.href?`href="${c.href}" target="_blank" rel="noopener"`:''}>
+                  ${c.icon?`<i class="fa-solid ${c.icon}"></i>`:''}${c.text||''}
+                </a>`).join('')}
+            </div>`:''}
+        </div>
+      </div>`;
+    document.body.appendChild(o);
+    const close=()=>{o.style.display='none';o.remove();sessionStorage.setItem(KEY,'1');};
+    o.querySelector('.stx-close').addEventListener('click',close);
+    o.addEventListener('click',e=>{if(e.target===o)close();});
+    o.style.display='flex'; if(opts.timeout) setTimeout(close, Number(opts.timeout));
+  }
+  specialThanksV2({
+    key:'thanks-global', title:'Special Thanks',
+    message:'Terima kasih untuk dukungan & kontribusi yang membuat panel ini berjalan.',
+    items:[
+      {icon:'fa-crown',text:'Vinzz',href:'https://t.me/vinzznyabobo'},
+      {icon:'fa-people-group',text:'Spaceman Invictus'},
+      {icon:'fa-person',text:'Vann (beban)',href:'https://t.me/vann4you1'},
+      {icon:'fa-people-group',text:'All Contributors & Buyers'}
+    ],
+    cta:[
+      {icon:'fa-paper-plane',text:'Telegram Channel',href:'https://t.me/spcinformation'},
+      {icon:'fa-crown',text:'Contact Owner',href:'https://t.me/vinzznyabobo',ghost:true}
+    ],
+    timeout:5000
+  });
+
+  // ----- Modal Ganti Password (sama fungsinya) -----
+  (function(){
+    const openBtn = document.getElementById('openChangePw');
+    const backdrop = document.getElementById('cp_backdrop');
+    const closeBtn = document.getElementById('cp_close');
+    const cancelBtn = document.getElementById('cp_cancel');
+
+    function openModal(){ if(!backdrop) return; backdrop.hidden = false; setTimeout(()=>document.getElementById('cp_current')?.focus(),10); }
+    function closeModal(){ if(!backdrop) return; backdrop.hidden = true;
+      const msg = document.getElementById('cp_msg'); if(msg){ msg.style.display='none'; msg.textContent=''; msg.className='result'; }
+      ['cp_current','cp_new','cp_confirm'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    }
+
+    openBtn?.addEventListener('click', openModal);
+    closeBtn?.addEventListener('click', closeModal);
+    cancelBtn?.addEventListener('click', closeModal);
+    backdrop?.addEventListener('click', e=>{ if(e.target===backdrop) closeModal(); });
+    window.addEventListener('keydown', e=>{ if(e.key==='Escape' && !backdrop.hidden) closeModal(); });
+  })();
+
+  // ----- Change password submit (preserve behavior) -----
+  (function(){
+    const btn = document.getElementById('cp_submit');
+    if(!btn) return;
+    function setMsg(msg, type='info'){
+      const el = document.getElementById('cp_msg');
+      if(!el) return;
+      el.innerHTML = msg;
+      el.className = `result ${type==='error'?'error':'success'}`;
+      el.style.display = 'block';
+    }
+    btn.addEventListener('click', async () => {
+      const cur = document.getElementById('cp_current').value.trim();
+      const nw  = document.getElementById('cp_new').value.trim();
+      const cf  = document.getElementById('cp_confirm').value.trim();
+      if(!cur || !nw || !cf) return setMsg('Semua field wajib diisi.','error');
+      if(nw !== cf) return setMsg('Konfirmasi password tidak cocok.','error');
+      if(nw.length < 8) return setMsg('Password min 8 karakter.','error');
+      try {
+        const token = localStorage.getItem('authToken') || '';
+        const resp = await fetch('/api/user/change-password', {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json', 'Authorization': token?`Bearer ${token}`:'', 'X-Device-Id': localStorage.getItem('device_id') || '' },
+          body: JSON.stringify({ currentPassword: cur, newPassword: nw })
+        });
+        if (resp.status === 403) { setMsg('Akun ini terikat ke device lain.','error'); return; }
+        if (resp.status === 423) { setMsg('Device belum terikat. Silakan login ulang.','error'); location.href='/'; return; }
+        if (resp.status === 440) { setMsg('Sesi kedaluwarsa. Silakan login ulang.','error'); localStorage.removeItem('authToken'); location.href='/'; return; }
+        const data = await resp.json().catch(()=>({ ok:false, error:'Invalid response' }));
+        if (!resp.ok || !data.ok) return setMsg(data.error || 'Gagal mengganti password','error');
+        setMsg(data.message || 'Password berhasil diubah.','success');
+        setTimeout(()=>{ if(!document.getElementById('cp_backdrop').hidden) document.getElementById('cp_backdrop').hidden = true; },1200);
+      } catch(e) { setMsg('Gagal terhubung ke server.','error'); }
+    });
+  })();
+
+  // ----- Helpers / device id / logout -----
+  const token = localStorage.getItem('authToken');
+  function getDeviceId(){
+    const KEY='device_id';
+    let id = localStorage.getItem(KEY);
+    if(!id){
+      id = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g,c=>(c^crypto.getRandomValues(new Uint8Array(1))[0]&15>>(c/4)).toString(16));
+      localStorage.setItem(KEY, id);
+    }
+    return id;
+  }
+  window.logout = function(){ localStorage.removeItem('authToken'); location.href='/'; };
+  document.getElementById('btnLogout')?.addEventListener('click', window.logout);
+
+/* Replace attack form handler with this (ke dalam script yang sama) */
+(function(){
+  const form = document.getElementById('attackForm');
+  if(!form) return;
+  const targetEl = document.getElementById('target');
+  const methodEl = document.getElementById('method');
+  const resultEl = document.getElementById('result');
+  const attackBtnEl = document.getElementById('attackBtn');
+
+  // helper: create floating toast
+  function showLoadingToast(target) {
+    // remove existing toast if any
+    document.querySelectorAll('.stoast').forEach(t => t.remove());
+    const t = document.createElement('div');
+    t.className = 'stoast';
+    t.innerHTML = `<span class="dot"></span><span>Successfully attack to ${escapeHtml(target)}</span>`;
+    document.body.appendChild(t);
+    // auto-hide after 3s (but keep if request finishes earlier)
+    t._hideTimeout = setTimeout(()=>{ t.style.opacity = '0'; setTimeout(()=>t.remove(),300); }, 3000);
+    return t;
+  }
+
+  // helper: escape minimal html to avoid injection
+  function escapeHtml(s){ return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const target = (targetEl?.value || '').trim();
+    const method = (methodEl?.value || '').trim();
+
+    if(!target || !method){ showResult('<i class="fa-solid fa-xmark"></i>Harap isi semua kolom.','error'); return; }
+
+    const cleanTarget = target.replace(/\D/g,'');
+    if(cleanTarget.length < 10 || cleanTarget.length > 15){ showResult('<i class="fa-solid fa-xmark"></i> Nomor telepon tidak valid.', "error"); return; }
+
+    // show floating toast immediately (loading indicator)
+    const toast = showLoadingToast(target);
+
+    // update button state (existing UI)
+    attackBtnEl.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Meluncurkan Serangan...';
+    attackBtnEl.disabled = true;
+    if(resultEl) resultEl.style.display = 'none';
+
+    try {
+      const resp = await fetch(`/attack/metode?metode=${encodeURIComponent(method)}&target=${encodeURIComponent(target)}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'X-Device-Id': localStorage.getItem('device_id') || getDeviceId(),
+          'Content-Type': 'application/json'
+        }
+      });
+
+      // ensure loading toast removed once response arrives
+      if (toast) { clearTimeout(toast._hideTimeout); toast.remove(); }
+
+      if (resp.status === 403) { showResult('Akun ini terikat ke device lain.','error'); }
+      else if (resp.status === 423) { showResult('Device belum terikat. Silakan login ulang.','error'); location.href = '/'; return; }
+      else if (resp.status === 440) { showResult('Sesi kedaluwarsa. Silakan login lagi.','error'); localStorage.removeItem('authToken'); location.href = '/'; return; }
+
+      const data = await resp.json().catch(()=>({}));
+      if (resp.ok && data.status === "200") {
+        // show standard result box (server success)
+        showResult(`<i class="fa-solid fa-check"></i> ${data.result}! Target: ${data.target}, Method: ${data.metode}`, "success");
+      } else {
+        // show server error or fallback
+        showResult(`${data.message || 'Terjadi kesalahan'}`, 'error');
+      }
+    } catch (err) {
+      console.error(err);
+      // remove toast if still present
+      document.querySelectorAll('.stoast').forEach(t => t.remove());
+      showResult('Koneksi gagal. Periksa jaringan Anda.', 'error');
+    } finally {
+      attackBtnEl.innerHTML = '<i class="fa-solid fa-bolt"></i> LAUNCH ATTACK';
+      attackBtnEl.disabled = false;
+    }
+  });
+})();
+
+  function showResult(message, type){
+    const el = document.getElementById('result');
+    if(!el) { alert(message); return; }
+    el.textContent = message;
+    el.className = `result ${type}`;
+    el.style.display = 'block';
+    setTimeout(()=>{ el.style.display='none'; }, 10000);
+  }
+
+  // ----- Auto-format phone (62) -----
+  (function(){
+    const t = document.getElementById('target');
+    if(!t) return;
+    t.addEventListener('input', e => {
+      let v = e.target.value.replace(/\D/g,'');
+      if(v.startsWith('0')) v = '62' + v.substring(1);
+      else if(v.startsWith('8') && !v.startsWith('62')) v = '62' + v;
+      e.target.value = v;
+    });
+  })();
+
+  // ----- Music player (preserve behavior) -----
+  (function(){
+    const musicToggle = document.getElementById('musicToggle');
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const musicIcon = document.getElementById('musicIcon');
+    if(!musicToggle || !backgroundMusic || !musicIcon) return;
+    let isPlaying = localStorage.getItem('musicPlaying') === 'true';
+    backgroundMusic.volume = .3;
+    musicToggle.addEventListener('click', function(){
+      if(isPlaying){ backgroundMusic.pause(); musicIcon.className = 'fa-solid fa-play'; isPlaying = false; }
+      else { backgroundMusic.play().catch(()=>{}); musicIcon.className = 'fa-solid fa-pause'; isPlaying = true; }
+      localStorage.setItem('musicPlaying', isPlaying);
+    });
+    if(isPlaying){ backgroundMusic.play().catch(()=>{}); musicIcon.className = 'fa-solid fa-pause'; }
+  })();
+
+  // ----- Profile & stats (guarded calls) -----
+  (async function(){
+    const deviceId = localStorage.getItem('device_id') || getDeviceId();
+
+    // loadProfile & loadStats may be defined elsewhere; guard them
+    if (typeof loadProfile === 'function') {
+      try { await loadProfile(); } catch(e){ console.warn('loadProfile error', e); }
+    } else {
+      // fallback: try inline simple fetch
+      try {
+        const r = await fetch('/api/me', { headers: { 'Authorization': `Bearer ${token}`, 'X-Device-Id': deviceId }});
+        if (r.status === 403) alert('Akun terikat ke device lain');
+        if (r.status === 423) { alert('Device belum terikat. Login ulang'); location.href = '/'; return; }
+        if (r.status === 440) { alert('Sesi kedaluwarsa. Silakan login lagi.'); localStorage.removeItem('authToken'); location.href = '/'; return; }
+        const d = await r.json().catch(()=>({}));
+        if (d.success && d.user) {
+          const uName = document.getElementById('username');
+          const uRole = document.getElementById('userRole');
+          if(uName) uName.textContent = d.user.username || uName.textContent;
+          if(uRole) uRole.textContent = d.user.role || uRole.textContent;
+        }
+      } catch(e) { console.error('profile fallback error', e); }
+    }
+
+    if (typeof loadStats === 'function') {
+      try { await loadStats(); } catch(e){ console.warn('loadStats error', e); }
+    } else {
+      try {
+        const r = await fetch('/api/stats', { headers: { 'Authorization': `Bearer ${token}`, 'X-Device-Id': deviceId }});
+        const d = await r.json().catch(()=>({}));
+        const su = document.getElementById('statUsers');
+        const ss = document.getElementById('statSender');
+        if(su) su.textContent = d.users ?? 0;
+        if(ss) ss.textContent = d.senders ?? 0;
+      } catch(e) { console.error('stats fallback error', e); }
+    }
+  })();
+
+document.addEventListener('DOMContentLoaded', function () {
+  // Elemen popup
+  const backdrop = document.getElementById('attackSuccessBackdrop');
+  const closeBtns = [document.getElementById('attackSuccessClose'), document.getElementById('attackSuccessClose2')].filter(Boolean);
+  const okBtn = document.getElementById('attackSuccessOk');
+  const targetEl = document.getElementById('attackSuccessTarget');
+
+  function showPopupFor(target) {
+    if (!backdrop) return;
+    targetEl.textContent = target || 'unknown';
+    backdrop.style.display = 'flex';
+    // fokus aksesibilitas
+    document.getElementById('attackSuccessOk')?.focus();
+  }
+  function hidePopup() {
+    if (!backdrop) return;
+    backdrop.style.display = 'none';
+  }
+
+  closeBtns.forEach(b => b.addEventListener('click', hidePopup));
+  okBtn?.addEventListener('click', hidePopup);
+  backdrop?.addEventListener('click', function(e){
+    if (e.target === backdrop) hidePopup();
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') hidePopup();
+  });
+
+  // Tangkapan submit: tampilkan popup dulu (capture phase),
+  // biarkan handler submit asli berjalan setelahnya.
+  const attackForm = document.getElementById('attackForm');
+  if (attackForm) {
+    attackForm.addEventListener('submit', function (ev) {
+      try {
+        // ambil nomor target dari input (sesuai form di project)
+        const input = attackForm.querySelector('#target');
+        const val = input ? input.value.trim() : '';
+        // format tampil (pakai pola yang sama seperti di form)
+        const display = val || '628xxxxxxxxx';
+        showPopupFor(display);
+        // tidak preventDefault -> biarkan handler asli menjalankan fetch/attack
+      } catch (err) {
+        console.error('Popup show error', err);
+      }
+    }, { capture: true }); // <-- capture phase supaya popup muncul segera
+  } else {
+    console.warn('attackForm tidak ditemukan — pastikan id="attackForm" ada di halaman.');
+  }
+});
+
+  // ----- Quick Menu drawer init (safe) -----
+  (function(){
+    const drawer = document.getElementById('qmDrawer');
+    const overlay = document.getElementById('qmOverlay');
+    const openers = document.querySelectorAll('#qmMore,#appTitle');
+    const closer = document.getElementById('qmClose');
+
+    if(!drawer || !overlay) return; // no drawer present -> exit
+
+    function open(){ drawer.classList.add('active'); overlay.classList.add('active'); drawer.setAttribute('aria-hidden','false'); }
+    function close(){ drawer.classList.remove('active'); overlay.classList.remove('active'); drawer.setAttribute('aria-hidden','true'); }
+
+    openers.forEach(b => b && b.addEventListener('click', open));
+    overlay.addEventListener('click', close);
+    closer.addEventListener('click', close);
+    window.addEventListener('keydown', e => { if(e.key === 'Escape') close(); });
+  })();
+
+})(); // end wrapper
+// ==================== end script ====================
+</script>
+  <script src="asset/news.js" defer></script>
+ <!-- Success Attack Popup -->
+<div id="attackSuccessBackdrop" class="stx-overlay" style="display:none;">
+  <div class="stx-card" role="dialog" aria-modal="true" id="attackSuccessCard">
+    <div class="stx-head">
+      <div class="stx-title"><i class="fa-solid fa-check-circle"></i> Success</div>
+      <button class="stx-close" id="attackSuccessClose" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div class="stx-body" id="attackSuccessBody" style="font-size:16px;">
+      <p style="margin:0 0 8px;">Successfully attack to</p>
+      <div id="attackSuccessTarget" style="font-weight:900; font-size:20px; letter-spacing:.6px;"></div>
+      <p style="margin-top:10px;color:#b7abda;font-size:13px;">
+        Permintaan dikirim — proses attack akan tetap berjalan di belakang layar.
+      </p>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px;justify-content:flex-end;">
+      <button class="stx-btn--ghost" id="attackSuccessClose2">Tutup</button>
+      <button class="stx-btn" id="attackSuccessOk"><i class="fa-solid fa-share"></i> OK</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>

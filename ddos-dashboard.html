@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spaceman Invictus - DDOS Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJDNi40NzcgMiAyIDYuNDc3IDIgMTJTNi40NzcgMjIgMTIgMjJTMjIgMTcuNTIzIDIyIDEyUzE3LjUyMyAyIDEyIDJaIiBmaWxsPSIjRkY2QjAwIi8+CjxwYXRoIGQ9Ik0xNi4xIDlMMTIgMTMuMUw3LjkgOUw2LjUgMTAuNEwxMiAxNS45TDE3LjUgMTAuNEwxNi4xIDlaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="asset/style.css">
+</head>
+<style>
+  /* ==== AppBar Quick Menu Drawer ==== */
+  .qm-overlay{position:fixed;inset:0;display:none;background:rgba(10,8,18,.55);backdrop-filter:blur(6px);z-index:120}
+  .qm-overlay.active{display:block}
+  .qm-drawer{position:fixed;left:0;top:0;height:100vh;width:min(84vw,320px);background:#0f0b1a;border-right:1px solid #2a2343;box-shadow:0 10px 40px rgba(0,0,0,.45);transform:translateX(-102%);transition:transform .22s ease;z-index:121}
+  .qm-drawer.active{transform:translateX(0)}
+  .qm-head{padding:16px;border-bottom:1px solid #201a34;font-weight:900;letter-spacing:.6px;color:#eae6ff}
+  .qm-list{padding:12px}
+  .qm-item{display:flex;align-items:center;gap:12px;margin:10px 0;padding:12px 14px;border-radius:14px;border:1px solid rgba(166,77,242,.22);background:linear-gradient(135deg,#2a2142,#1a1530);color:#eae6ff;text-decoration:none;font-weight:700}
+  .qm-item i{width:36px;height:36px;border-radius:12px;background:#1f1938;border:1px solid #2d2557;display:grid;place-items:center}
+  .qm-close{position:absolute;right:10px;top:10px;width:38px;height:38px;border-radius:12px;border:1px solid #2a2343;background:#17122b;color:#fff;display:grid;place-items:center;cursor:pointer}
+  .appbar{position:sticky;top:0;z-index:200;background:#120f1c;border-bottom:1px solid #251e3b;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;color:#eae6ff}
+  .appbar .app-title{cursor:pointer;padding:8px 12px;border-radius:10px;font-weight:800;letter-spacing:.6px}
+  .appbar .app-title b{color:#a64df2}
+  .appbar .app-title:hover{background:#1a1430}
+  .iconbtn{width:40px;height:40px;border-radius:12px;background:#1c1730;border:1px solid #29224b;color:#eae6ff;display:grid;place-items:center}
+</style>
+<body>
+	<header class="appbar">
+  <div class="iconbtn"><i class="fa-solid fa-bolt"></i></div> <!-- boleh ganti ikon -->
+  <div class="title app-title" id="appTitle">SPACEMAN INVICTUS <b>V1</b></div>
+  <button class="iconbtn" id="qmMore" aria-label="Quick Menu"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+</header>
+<!-- News slider -->
+<div class="slider" id="newsSlider"></div>
+
+    <!-- Quick Menu Drawer -->
+<div class="qm-overlay" id="qmOverlay"></div>
+<aside class="qm-drawer" id="qmDrawer" aria-hidden="true">
+  <button class="qm-close" id="qmClose" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+  <div class="qm-head">SPACEMAN INVICTUS <b>V1</b></div>
+  <nav class="qm-list">
+    <a class="qm-item" href="/dashboard"><i class="fa-solid fa-house"></i><span>Bug Dashboard</span></a>
+    <a class="qm-item" href="/ngl-locfoto.html"><i class="fa-solid fa-bolt"></i><span>Lacak lokasi via foto & Ngl spammer</span></a>
+    <a class="qm-item" href="/tracking.html"><i class="fa-solid fa-map-location-dot"></i><span>Tracking & Lihat muka Target</span></a>
+  </nav>
+</aside>
+
+     <div class="dashboard-container">
+        <div class="header">
+            <h1><i class="fa-solid fa-bolt"></i> DDOS PANEL</h1>
+            <p>Premium DDOS Attack Tool</p>
+            <span class="premium-badge"><i class="fa-solid fa-fire"></i> DDOS ACCESS <i class="fa-solid fa-fire"></i></span>
+        </div>
+
+   <section class="card">
+  <aside class="col-left">
+    <!-- pakai ulang user-info lama -->
+    <section class="card">
+      <div class="profile-card">
+        <div class="avatar"></div>
+        <div>
+          <div style="font-weight:800">Welcome, <span id="username">User</span></div>
+          <div style="font-size:12px;color:#b7abda">Role: <span id="userRole">USER</span></div>
+        </div>
+      </div>
+     </section>
+     
+  <section class="card">
+        <form id="ddosForm">
+            <div class="form-group">
+                <label for="target"><i class="fa-solid fa-crosshairs"></i> Target URL/IP</label>
+                <input type="text" id="target" placeholder="https://example.com or 192.168.1.1" required>
+            </div>
+            <div class="form-group">
+                <label for="duration"><i class="fa-solid fa-hourglass-start"></i> Duration (seconds)</label>
+                <input type="number" id="duration" placeholder="1-500" min="1" max="500" required>
+            </div>
+            <div class="form-group">
+                <label for="method"><i class="fa-solid fa-bolt"></i> DDOS Method</label>
+                <select id="method" required>
+                    <option value="">Select Method</option>
+                    <option value="KILL-DO">KILL DO (vps) L4</option>
+                    <option value="MC-KILL">KILL SERVER MINECRAFT L4</option>
+                    <option value="CF">CF BYPASS L7</option>
+                    <option value="saturn-down">ATTACK WEB L7</option>
+                    <option value="TCP">HOLD SERVER GAME L4</option>
+                    <option value="FLOOD">SLOW THE WEBS L7</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="proxyUrl"><i class="fa-solid fa-network-wired"></i> Proxy URL (Optional)</label>
+                <input type="text" id="proxyUrl" placeholder="http://myproxy.com">
+                <small>Masukkan URL proxy jika diperlukan.</small>
+            </div>
+            <button type="submit" class="attack-btn" id="attackBtn">
+                <i class="fa-solid fa-fire-bolt"></i> LAUNCH DDOS ATTACK
+            </button>
+        </form>
+        <div id="result" class="result"></div>
+    <button type="button" class="btn logout" onclick="logout()" style="margin-top:10px;">
+      <i class="fa-solid fa-right-from-bracket"></i> Logout
+    </button>
+    
+<!-- NIK PARSER CARD -->
+<section class="card">
+  <form id="nikForm" class="nik-card" autocomplete="off">
+    <label for="nikInput" style="display:block; margin-bottom:8px;">
+      <i class="fa-solid fa-id-card"></i> Masukkan NIK
+    </label>
+    <input id="nikInput" name="nik" type="text" maxlength="16" placeholder="16 digit NIK" required style="width:100%;padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);background:transparent;color:inherit">
+    <div style="margin-top:12px;display:flex;gap:8px;align-items:center;">
+      <button type="submit" class="btn" id="nikSubmit">
+        <i class="fa-solid fa-magnifying-glass"></i> Cek NIK
+      </button>
+      <div id="nikSpinner" style="display:none;align-items:center;color:var(--muted-color,#b7abda);gap:8px;">
+        <i class="fa-solid fa-spinner fa-spin"></i><small>Sedang memproses...</small>
+      </div>
+    </div>
+
+    <div id="nikResult" class="result" style="margin-top:14px;display:none"></div>
+  </form>
+</section>
+
+        <div class="footer">
+            <p>Powered by <a href="Ayano Team" target="_blank"><i class="fa-brands fa-telegram"></i> Information Spaceman</a></p>
+            <p>Made with <i class="fa-solid fa-heart"></i> by <a href="https://t.me/vinzznyabobo" target="_blank"><i class="fa-solid fa-code"></i>@Vinzz</a></p>
+        </div>
+    </div>
+
+    <audio id="backgroundMusic" loop>
+        <source src="asset/mg.mp3" type="audio/mpeg">
+    </audio>
+    <button id="musicToggle" class="music-control" title="Play/Pause Music">
+        <i class="fa-solid fa-play" id="musicIcon"></i>
+    </button>
+
+<script>
+function specialThanksV2(opts){
+  const KEY = 'stx_'+(opts?.key||'default');
+  if (!opts?.always && sessionStorage.getItem(KEY)) return;
+
+  const o = document.createElement('div');
+  o.className = 'stx-overlay';
+  o.innerHTML = `
+    <div class="stx-card" role="dialog" aria-label="Special Thanks">
+      <div class="stx-head">
+        <div class="stx-title"><i class="fa-solid fa-award"></i>${opts.title||'Special Thanks'}</div>
+        <button class="stx-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="stx-body">
+        ${opts.message||''}
+        ${Array.isArray(opts.items)&&opts.items.length?`
+          <div class="stx-list">
+            ${opts.items.map(t=>`
+              <div class="stx-item">
+                ${t.icon?`<i class="fa-solid ${t.icon}"></i>`:''}
+                <div>${t.text||''}</div>
+              </div>`).join('')}
+          </div>`:''}
+        ${Array.isArray(opts.cta)&&opts.cta.length?`
+          <div class="stx-cta">
+            ${opts.cta.map(c=>`
+              <a class="stx-btn ${c.ghost?'stx-btn--ghost':''}" ${c.href?`href="${c.href}" target="_blank" rel="noopener"`:''}>
+                ${c.icon?`<i class="fa-solid ${c.icon}"></i>`:''}${c.text||''}
+              </a>`).join('')}
+          </div>`:''}
+      </div>
+    </div>`;
+  document.body.appendChild(o);
+
+  const close = () => { o.style.display='none'; o.remove(); sessionStorage.setItem(KEY,'1'); };
+  o.querySelector('.stx-close').addEventListener('click', close);
+  o.addEventListener('click', e=>{ if(e.target===o) close(); });
+
+  o.style.display = 'flex';
+  if (opts.timeout) setTimeout(close, Number(opts.timeout));
+}
+
+specialThanksV2({
+  key: 'thanks-global',
+  title: 'Special Thanks',
+  message: 'Terima kasih untuk dukungan & kontribusi yang membuat panel ini berjalan.',
+  items: [
+    { icon:'fa-crown', text:'Vinzz', href:'https://t.me/vinzznyabobo' },
+    { icon:'fa-solid fa-people-group', text:'Spaceman invictus' },
+    { icon:'fa-solid fa-person', text:', Vann (beban)', href:'https://t.me/vann4you1' },
+    { icon:'fa-people-group', text:'All Contributors & Buyers' }
+  ],
+  cta: [
+    { icon:'fa-paper-plane', text:'Telegram Channel', href:'https://t.me/spcinformation' },
+    { icon:'fa-crown', text:'Contact Owner', href:'https://t.me/vinzznyabobo', ghost:true }
+  ],
+  timeout: 5000
+});
+
+    	// === INSERT: helper deviceId ===
+const getDeviceId = () => {
+  const KEY = 'device_id';
+  let id = localStorage.getItem(KEY);
+  if (!id) {
+    id = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> (c / 4)).toString(16)
+    );
+    localStorage.setItem(KEY, id);
+  }
+  return id;
+};
+
+        // Fungsi helper diletakkan di luar agar bisa diakses
+        function logout() {
+            localStorage.removeItem('authToken');
+            window.location.href = '/';
+        }
+
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = message;
+            resultDiv.className = `result ${type}`;
+            resultDiv.style.display = 'block';
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                window.location.href = '/';
+                return;
+            }
+
+            try {
+                const payload = JSON.parse(atob(token));
+                document.getElementById('username').textContent = payload.username || 'User';
+                document.getElementById('userRole').innerHTML = `<i class="fa-solid fa-crown"></i> ${payload.role || 'VIP'}`;
+            } catch (error) {
+                console.error('Error parsing token:', error);
+                logout();
+            }
+
+            // FUNGSI UNTUK DDOS FORM (TIDAK DIUBAH)
+            document.getElementById('ddosForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const target = document.getElementById('target').value.trim();
+                const duration = document.getElementById('duration').value;
+                const method = document.getElementById('method').value;
+                const proxyUrl = document.getElementById('proxyUrl').value.trim();
+                const attackBtn = document.getElementById('attackBtn');
+                
+                if (!target || !duration || !method) {
+                    showResult('❌ Harap isi semua kolom yang wajib diisi!', 'error');
+                    return;
+                }
+
+                attackBtn.innerHTML = '<span class="loading"></span> Meluncurkan Serangan...';
+                attackBtn.disabled = true;
+
+                try {
+                    let requestUrl = `/ddos?key=NullByte&metode=${method}&target=${encodeURIComponent(target)}&time=${duration}`;
+                    if (proxyUrl) {
+                        requestUrl += `&proxyUrl=${encodeURIComponent(proxyUrl)}`;
+                    }
+                    const response = await fetch(requestUrl, {
+  method: 'GET',
+  headers: {
+    'Authorization': `Bearer ${token}`,
+    'X-Device-Id': localStorage.getItem('device_id') || getDeviceId()
+  }
+});
+
+if (response.status === 403) showResult('Akun ini terikat ke device lain.', 'error');
+if (response.status === 423) { 
+  showResult('Device belum terikat. Silakan login ulang.', 'error'); 
+  location.href = '/'; 
+  return;
+}
+if (response.status === 440) { 
+  showResult('Sesi kedaluwarsa. Silakan login lagi.', 'error'); 
+  localStorage.removeItem('authToken');
+  location.href = '/';
+  return;
+}
+
+const data = await response.json();
+                    if (response.ok && data.status) {
+                        showResult(` Serangan DDOS Berhasil Diluncurkan!<br> Target: ${data.Target}<br>Metode: ${data.Methods}`, 'success');
+                    } else {
+                        showResult(` Error: ${data.message || 'Serangan gagal.'}`, 'error');
+                    }
+                } catch (error) {
+                    showResult(' Terjadi kesalahan jaringan. Silakan coba lagi.', 'error');
+                } finally {
+                    attackBtn.innerHTML = '<i class="fa-solid fa-fire-bolt"></i> LAUNCH DDOS ATTACK';
+                    attackBtn.disabled = false;
+                }
+            });
+
+            // FUNGSI LAINNYA (TIDAK DIUBAH)
+            const musicToggle = document.getElementById('musicToggle');
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            const musicIcon = document.getElementById('musicIcon');
+            let isPlaying = localStorage.getItem('musicPlaying') === 'true';
+backgroundMusic.volume = 0.3;
+
+musicToggle.addEventListener('click', function() {
+  if (isPlaying) {
+    backgroundMusic.pause();
+    musicIcon.className = 'fa-solid fa-play';
+    isPlaying = false;
+  } else {
+    backgroundMusic.play().catch(e => console.log('Autoplay failed'));
+    musicIcon.className = 'fa-solid fa-pause';
+    isPlaying = true;
+  }
+  localStorage.setItem('musicPlaying', isPlaying);
+});
+
+if (isPlaying) {
+  backgroundMusic.play().catch(e => console.log('Autoplay failed'));
+  musicIcon.className = 'fa-solid fa-pause';
+}
+        });
+/* NIK parser: start + polling status + render */
+(function () {
+  const nikForm = document.getElementById('nikForm');
+  const nikInput = document.getElementById('nikInput');
+  const nikResult = document.getElementById('nikResult');
+  const nikSpinner = document.getElementById('nikSpinner');
+
+  function setResult(html, type = 'info') {
+    nikResult.innerHTML = html;
+    nikResult.className = 'result ' + (type === 'error' ? 'error' : (type === 'success' ? 'success' : 'info'));
+    nikResult.style.display = 'block';
+  }
+
+  function renderNik(data) {
+    if (!data) return '<i class="fa-solid fa-triangle-exclamation"></i> Tidak ada data';
+    return `
+<div style="display:flex;gap:.6rem;align-items:center;">
+  <div style="font-size:20px"><i class="fa-solid fa-id-badge"></i></div>
+  <div>
+    <b>${data.nama || '-'}</b><br>
+    <small class="muted"><i class="fa-solid fa-hashtag"></i> ${data.nik || '-'}</small>
+  </div>
+</div>
+
+<hr style="opacity:.06;margin:.6rem 0">
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem">
+  <div><i class="fa-solid fa-venus-mars"></i> <b>Kelamin:</b> ${data.gender || data.kelamin || '-'}</div>
+  <div><i class="fa-solid fa-cake-candles"></i> <b>Tempat/Tgl Lahir:</b> ${data.tempatLahir || data.tempat_lahir || '-'}</div>
+  <div><i class="fa-solid fa-hourglass-half"></i> <b>Usia:</b> ${data.usia || '-'}</div>
+  <div><i class="fa-solid fa-map-location"></i> <b>Provinsi:</b> ${data.provinsi || '-'}</div>
+  <div><i class="fa-solid fa-city"></i> <b>Kabupaten:</b> ${data.kabupaten || data.kota || '-'}</div>
+  <div><i class="fa-solid fa-location-dot"></i> <b>Kecamatan:</b> ${data.kecamatan || '-'}</div>
+  <div><i class="fa-solid fa-house"></i> <b>Kelurahan:</b> ${data.kelurahan || '-'}</div>
+  <div><i class="fa-solid fa-map-pin"></i> <b>Alamat:</b> ${data.alamat || '-'}</div>
+  <div><i class="fa-solid fa-star"></i> <b>Zodiak:</b> ${data.zodiak || '-'}</div>
+  <div><i class="fa-solid fa-clock-rotate-left"></i> <b>Ultah mendatang:</b> ${data.ultahMendatang || data.ultah_mendatang || '-'}</div>
+</div>
+
+<hr style="opacity:.06;margin:.6rem 0">
+
+<div style="font-size:13px;color:var(--muted-color,#b7abda)">
+  <i class="fa-solid fa-info-circle"></i> Metadata:
+  <div><i class="fa-solid fa-list-ol"></i> Nomor Urut: ${data.nomorUrut || '-'}</div>
+  <div><i class="fa-solid fa-layer-group"></i> Kategori Usia: ${data.kategoriUsia || '-'}</div>
+  <div><i class="fa-solid fa-globe"></i> Jenis Wilayah: ${data.jenisWilayah || '-'}</div>
+  <div><i class="fa-solid fa-code-branch"></i> Kode Wilayah: ${data.kodeWilayah || '-'}</div>
+</div>
+    `;
+  }
+
+  if (!nikForm) {
+    console.warn('NIK parser: form #nikForm not found — parser disabled.');
+    return;
+  }
+
+  nikForm.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    ev.stopPropagation();
+
+    // clear previous
+    nikResult.style.display = 'none';
+    nikResult.innerHTML = '';
+
+    const nik = (nikInput.value || '').trim();
+    if (!/^[0-9]{16}$/.test(nik)) {
+      setResult('<i class="fa-solid fa-xmark"></i> NIK harus 16 digit angka.', 'error');
+      nikInput.focus();
+      return;
+    }
+
+    try {
+      nikSpinner.style.display = 'inline-flex';
+      setResult('<i class="fa-solid fa-clock"></i> Memulai proses di background… (bisa memakan waktu sampai 30 menit)', 'info');
+      console.log('Start parse-nik for', nik);
+
+      const resp = await fetch('/api/parse-nik', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`,
+          'X-Device-Id': localStorage.getItem('device_id') || ''
+        },
+        body: JSON.stringify({ nik })
+      });
+
+      console.log('parse-nik start response status=', resp.status);
+
+      if (resp.status === 403) { nikSpinner.style.display = 'none'; setResult('<i class="fa-solid fa-triangle-exclamation"></i> Akun ini terikat ke device lain.', 'error'); return; }
+      if (resp.status === 423) { nikSpinner.style.display = 'none'; setResult('<i class="fa-solid fa-triangle-exclamation"></i> Device belum terikat. Silakan login ulang.', 'error'); location.href='/'; return; }
+      if (resp.status === 440) { nikSpinner.style.display = 'none'; setResult('<i class="fa-solid fa-triangle-exclamation"></i> Sesi kedaluwarsa. Silakan login lagi.', 'error'); localStorage.removeItem('authToken'); location.href='/'; return; }
+
+      const j = await resp.json().catch(() => ({ ok:false, error:'Invalid JSON' }));
+      console.log('parse-nik start response body=', j);
+
+      if (!j.ok || !j.taskId) {
+        nikSpinner.style.display = 'none';
+        setResult('<i class="fa-solid fa-triangle-exclamation"></i> ' + (j.error || 'Gagal memulai proses.'), 'error');
+        return;
+      }
+
+      const taskId = j.taskId;
+      setResult(`<i class="fa-solid fa-clock"></i> Task dikirim (ID: ${taskId}). Menunggu hasil...`, 'info');
+
+      // POLLING
+      let attempts = 0;
+      const maxAttempts = 360; // 360 * 5s = 30 menit
+      const intervalMs = 5000;
+
+      const poll = setInterval(async () => {
+        attempts++;
+        console.log('Polling status for task', taskId, 'attempt', attempts);
+        if (attempts > maxAttempts) {
+          clearInterval(poll);
+          nikSpinner.style.display = 'none';
+          setResult('<i class="fa-solid fa-hourglass-end"></i> Timeout menunggu hasil (30 menit). Coba lagi nanti.', 'error');
+          return;
+        }
+        try {
+          const s = await fetch(`/api/parse-nik/status/${taskId}`, {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`, 'X-Device-Id': localStorage.getItem('device_id') || '' }
+          });
+
+          console.log('poll status', s.status);
+          if (s.status === 403) { clearInterval(poll); nikSpinner.style.display = 'none'; setResult('<i class="fa-solid fa-triangle-exclamation"></i> Akun terikat device lain.', 'error'); return; }
+          if (s.status === 423) { clearInterval(poll); nikSpinner.style.display = 'none'; setResult('<i class="fa-solid fa-triangle-exclamation"></i> Device belum terikat. Login ulang.', 'error'); location.href='/'; return; }
+          if (s.status === 440) { clearInterval(poll); nikSpinner.style.display = 'none'; setResult('<i class="fa-solid fa-triangle-exclamation"></i> Sesi kedaluwarsa. Silakan login lagi.', 'error'); localStorage.removeItem('authToken'); location.href='/'; return; }
+
+          const st = await s.json().catch(() => ({ status:'error', error:'Invalid JSON' }));
+          console.log('poll body', st);
+
+          if (st.status === 'pending') {
+            setResult(`<i class="fa-solid fa-clock"></i> Sedang diproses… (${attempts * (intervalMs/1000)}s)`, 'info');
+            return;
+          }
+          if (st.status === 'error') {
+            clearInterval(poll);
+            nikSpinner.style.display = 'none';
+            setResult('<i class="fa-solid fa-bug"></i> Error: ' + (st.error || 'Terjadi kesalahan saat memproses'), 'error');
+            return;
+          }
+          if (st.status === 'done') {
+            clearInterval(poll);
+            nikSpinner.style.display = 'none';
+            setResult(renderNik(st.data), 'success');
+            return;
+          }
+        } catch (err) {
+          console.warn('Polling error', err);
+          // retry on next interval
+        }
+      }, intervalMs);
+
+    } catch (err) {
+      nikSpinner.style.display = 'none';
+      console.error('Start parse error', err);
+      setResult('<i class="fa-solid fa-bug"></i> Gagal memulai proses NIK.', 'error');
+    }
+  });
+})();
+
+<!-- REPLACE the existing Quick Menu JS with this safe version -->
+(function(){
+  const drawer  = document.getElementById('qmDrawer');
+  const overlay = document.getElementById('qmOverlay');
+  const closer  = document.getElementById('qmClose');
+
+  // tombol pemicu: bars kiri (#qmOpen), kebab kanan (#qmMore), dan judul (#appTitle)
+  const openers = Array.from(document.querySelectorAll('#qmOpen,#qmMore,#appTitle,.js-qm-open'));
+
+  // safe guard: jika elemen drawer/overlay tidak ada, skip everything (prevents null.classList errors)
+  if (!drawer || !overlay) {
+    console.warn('Quick Menu: drawer or overlay element not found — quick menu disabled.');
+    return;
+  }
+
+  function open(){
+    drawer.classList.add('active');
+    overlay.classList.add('active');
+    drawer.setAttribute('aria-hidden','false');
+    overlay.setAttribute('aria-hidden','false');
+  }
+  function close(){
+    drawer.classList.remove('active');
+    overlay.classList.remove('active');
+    drawer.setAttribute('aria-hidden','true');
+    overlay.setAttribute('aria-hidden','true');
+  }
+
+  // attach listeners only to present openers
+  openers.forEach(btn => {
+    if (!btn) return;
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      open();
+    });
+  });
+
+  overlay.addEventListener('click', close);
+  closer?.addEventListener('click', close);
+  window.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
+    </script>
+    <script src="asset/news.js" defer></script>
+</body>
+</html>

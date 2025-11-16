@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🚧 Maintenance Server</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(circle at top, #1a1a2e, #0f0f1a);
+      color: #fff;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .maint-wrap {
+      text-align: center;
+      max-width: 500px;
+      padding: 25px;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 0 30px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.1);
+      animation: fadeIn 0.8s ease;
+    }
+    .maint-wrap h1 {
+      font-size: 2rem;
+      margin-bottom: 15px;
+      color: #ffcc00;
+      text-shadow: 0 0 8px rgba(255,255,0,0.6);
+    }
+    .maint-wrap p {
+      font-size: 1rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      opacity: 0.9;
+    }
+    .note {
+      font-size: 0.95rem;
+      margin: 15px 0;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.08);
+      color: #ffd966;
+      font-weight: 600;
+      animation: pulse 2s infinite;
+    }
+    .btn-row {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-link {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 10px;
+      font-weight: bold;
+      text-decoration: none;
+      color: #fff;
+      background: linear-gradient(90deg,#ff4b2b,#ff416c);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .btn-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255,65,108,0.5);
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+    @keyframes pulse { 
+      0%,100% { box-shadow: 0 0 8px rgba(255,217,102,0.4); }
+      50% { box-shadow: 0 0 16px rgba(255,217,102,0.8); }
+    }
+    .icon {
+      font-size: 50px;
+      margin-bottom: 10px;
+      animation: spin 6s linear infinite;
+      display: inline-block;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="maint-wrap">
+    <div class="icon">⚙️</div>
+    <h1>🚧 Maintenance</h1>
+    <p>Server <b>Spaceman Invictus</b> sedang dalam MAINTENANCE.<br>
+       Silakan kembali beberapa saat lagi.</p>
+    <div class="note">ℹ️ Catatan: Server sedang <u>diperbaiki</u> atau ada <u>penambahan fitur baru</u>.</div>
+    <div class="btn-row">
+      <a href="https://t.me/vinzznyabobo" target="_blank" class="btn-link">💬 Customer Service</a>
+      <a href="https://t.me/spcinformation" target="_blank" class="btn-link">📢 Info Spaceman invictus Apk</a>
+    </div>
+  </div>
+
+  <!-- 🎵 Musik otomatis -->
+  <audio autoplay loop hidden>
+    <source src="https://files.catbox.moe/tkyjsf.mp3" type="audio/mpeg">
+    Hp lu butut ga support audio AMPOSS.
+  </audio>
+</body>
+</html>

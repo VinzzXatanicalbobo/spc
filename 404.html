@@ -1,0 +1,294 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Page Not Found</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: url('asset/bg.jpg') no-repeat center center fixed;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: -1;
+        }
+
+        .error-container {
+            text-align: center;
+            padding: 2rem;
+            max-width: 600px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        .error-code {
+            font-size: 8rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .error-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .error-message {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .error-icon {
+            font-size: 4rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .btn-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            background: linear-gradient(45deg, #764ba2, #667eea);
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 70%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            top: 40%;
+            left: 80%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @media (max-width: 768px) {
+            .error-code {
+                font-size: 6rem;
+            }
+            
+            .error-title {
+                font-size: 2rem;
+            }
+            
+            .error-message {
+                font-size: 1rem;
+            }
+            
+            .error-container {
+                padding: 1rem;
+            }
+        }
+
+        /* Music Player Controls */
+        .music-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            z-index: 1000;
+            border: none;
+            font-size: 20px;
+            color: white;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6);
+        }
+
+        .music-control.playing {
+            background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+            animation: pulse-music 2s infinite;
+        }
+
+        .music-control.playing:hover {
+            box-shadow: 0 12px 35px rgba(255, 107, 107, 0.6);
+        }
+
+        @keyframes pulse-music {
+            0% { box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4); }
+            50% { box-shadow: 0 8px 35px rgba(255, 107, 107, 0.7); }
+            100% { box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4); }
+        }
+
+        @media (max-width: 600px) {
+            .music-control {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+    
+    <div class="error-container">
+        <div class="error-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <div class="error-code">404</div>
+        <h1 class="error-title">Page Not Found</h1>
+        <p class="error-message">
+            Oops! The page you're looking for seems to have vanished into the digital void. 
+            Don't worry, it happens to the best of us.
+        </p>
+        <a href="/" class="btn-home">
+            <i class="fas fa-home"></i>
+            Back to Home
+        </a>
+    </div>
+
+    <!-- Music Player -->
+    <audio id="backgroundMusic" loop>
+        <source src="asset/mg.mp3" type="audio/mpeg">
+    </audio>
+    
+    <button id="musicToggle" class="music-control" title="Play/Pause Music">
+        <i class="fa-solid fa-play" id="musicIcon"></i>
+    </button>
+
+    <script>
+        // Music Player Functionality
+        const musicToggle = document.getElementById('musicToggle');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const musicIcon = document.getElementById('musicIcon');
+        let isPlaying = false;
+
+        // Set default volume
+        backgroundMusic.volume = 0.3;
+
+        musicToggle.addEventListener('click', function() {
+            if (isPlaying) {
+                backgroundMusic.pause();
+                musicIcon.className = 'fa-solid fa-play';
+                musicToggle.classList.remove('playing');
+                musicToggle.title = 'Play Music';
+                isPlaying = false;
+                localStorage.setItem('musicPlaying', 'false');
+            } else {
+                backgroundMusic.play().then(() => {
+                    musicIcon.className = 'fa-solid fa-pause';
+                    musicToggle.classList.add('playing');
+                    musicToggle.title = 'Pause Music';
+                    isPlaying = true;
+                    localStorage.setItem('musicPlaying', 'true');
+                }).catch(error => {
+                    console.log('Music playback failed:', error);
+                });
+            }
+        });
+
+        // Restore music state from localStorage
+        window.addEventListener('load', function() {
+            const musicState = localStorage.getItem('musicPlaying');
+            if (musicState === 'true') {
+                backgroundMusic.play().then(() => {
+                    musicIcon.className = 'fa-solid fa-pause';
+                    musicToggle.classList.add('playing');
+                    musicToggle.title = 'Pause Music';
+                    isPlaying = true;
+                }).catch(error => {
+                    console.log('Auto-play failed:', error);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

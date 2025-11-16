@@ -1,0 +1,72 @@
+[
+  {
+    "username": "Roufzzz",
+    "password": "123",
+    "role": "VIP",
+    "expired": "9y",
+    "deviceId": "d613dec6-1642-47a3-95b6-58b458ff7ae1"
+  },
+  {
+    "username": "",
+    "password": "",
+    "role": "ADMIN",
+    "expired": "9y",
+    "deviceId": "42422a87-f6a1-47e0-ade0-4ddbfce65163"
+  },
+  {
+    "username": "putzz",
+    "password": "putzz",
+    "role": "ADMIN",
+    "expired": "8y",
+    "deviceId": "7edf5293-e1e2-4bfe-9833-3769cf03340f"
+  },
+  {
+    "username": "GunDD",
+    "password": "gund11",
+    "role": "ADMIN",
+    "expired": "1m",
+    "deviceId": "f3bfc26a-6cce-48b8-ba98-08b4b2828ab7"
+  },
+  {
+    "username": "ndan",
+    "password": "ndan",
+    "role": "ADMIN",
+    "expired": "99d",
+    "deviceId": "ffa804bc-3da8-4e61-91ab-9e0312e469ad"
+  },
+  {
+    "username": "pakji",
+    "password": "pakji123",
+    "role": "VIP",
+    "expired": "30d",
+    "deviceId": "b67592ca-756a-409b-8211-074b705bc659"
+  },
+  {
+    "username": "ikyy",
+    "password": "41e12eSaturnX",
+    "role": "ADMIN",
+    "expired": "7y",
+    "deviceId": "7337f949-406e-4532-9c0d-5ada2c0a6285"
+  },
+  {
+    "username": "Alip",
+    "password": "ce12a7SaturnX",
+    "role": "VIP",
+    "expired": "30d",
+    "deviceId": "c965d5c1-c3c3-4fc2-bfa0-56f4be9af3b3"
+  },
+  {
+    "username": "nunud",
+    "password": "80265eSaturnX",
+    "role": "ADMIN",
+    "expired": "1y",
+    "deviceId": "112abb64-38cf-4eb9-8e52-73fdbd37ca22"
+  },
+  {
+    "username": "petrix",
+    "password": "f57470SaturnX",
+    "role": "VIP",
+    "expired": "70d",
+    "deviceId": "3b9a4fc2-a88e-4b20-aa82-f9dbca64bb18"
+  }
+]

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spaceman Invictus - Login Page</title>
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEyIDJDNi40NzcgMiAyIDYuNDc3IDIgMTJTNi40NzcgMjIgMTIgMjJTMjIgMTcuNTIzIDIyIDEyUzE3LjUyMyAyIDEyIDJaIiBmaWxsPSIjRkY2QjAwIi8+CjxwYXRoIGQ9Ik0xNi4xIDlMMTIgMTMuMUw3LjkgOUw2LjUgMTAuNEwxMiAxNS45TDE3LjUgMTAuNEwxNi4xIDlaIiBmaWxsPSJ3aGl0ZSIvPgo8L3N2Zz4K">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="asset/style.css">
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <header class="appbar">
+  <div class="iconbtn"><i class="fa-solid fa-lock"></i></div>
+  <div class="title">SPACEMAN INVICTUS <b>V1</b></div>
+  <a class="iconbtn" href="https://t.me/kyxsancs" target="_blank" style="color:#eae6ff"><i class="fa-brands fa-telegram"></i></a>
+</header>
+    <div class="login-container">
+        <div class="security-badge">
+            <i class="fa-solid fa-lock"></i> SECURE
+        </div>
+        
+<div class="header-text">
+  <h1>
+    <i class="fa-solid fa-skull skull-inline"></i>
+    Saturnz-X Team
+  </h1>
+  <div class="premium-sub">PREMIUM ACCES ONLY</div>
+</div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username"><i class="fa-solid fa-user"></i> Username</label>
+                <input type="text" id="username" placeholder="Enter your username" required autocomplete="username">
+            </div>
+
+            <div class="form-group">
+                <label for="password"><i class="fa-solid fa-key"></i> Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="login-btn" id="loginBtn">
+                <i class="fa-solid fa-rocket"></i> ACCESS PREMIUM PANEL
+            </button>
+        </form>
+<!-- Buy Access Button -->
+<button id="buyAccessBtn" class="buy-btn" type="button">
+  <i class="fa-solid fa-credit-card"></i>
+  <span>Buy Access Apps</span>
+</button>
+
+        <div id="result" class="result"></div>
+
+        <div class="footer">
+            <p><i class="fa-solid fa-lock"></i> Secured by Military-Grade Encryption</p>
+            <p>Powered by <a href="https://t.me/spcinformation" target="_blank"><i class="fa-brands fa-telegram"></i> @spcinformation</a></p>
+            <p>Owner Website <a href="https://t.me/vinzznyabobo" target="_blank"><i class="fa-solid fa-laptop-code"></i>@vinzznyabobo</a></p>
+            <p style="margin-top: 15px; font-size: 0.85rem; opacity: 0.8;">
+                <p class="disclaimer">
+  <i class="fa-solid fa-triangle-exclamation"></i>
+  For educational purposes only. Use responsibly.
+</p>
+            </p>
+        </div>
+    </div>
+
+    <!-- Music Player -->
+    <audio id="backgroundMusic" loop>
+        <source src="asset/mg.mp3" type="audio/mpeg">
+    </audio>
+    
+    <button id="musicToggle" class="music-control" title="Play/Pause Music">
+        <i class="fa-solid fa-play" id="musicIcon"></i>
+    </button>
+
+<script>
+function specialThanksV2(opts){
+  const KEY = 'stx_'+(opts?.key||'default');
+  if (!opts?.always && sessionStorage.getItem(KEY)) return;
+
+  const o = document.createElement('div');
+  o.className = 'stx-overlay';
+  o.innerHTML = `
+    <div class="stx-card" role="dialog" aria-label="Special Thanks">
+      <div class="stx-head">
+        <div class="stx-title"><i class="fa-solid fa-award"></i>${opts.title||'Special Thanks'}</div>
+        <button class="stx-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="stx-body">
+        ${opts.message||''}
+        ${Array.isArray(opts.items)&&opts.items.length?`
+          <div class="stx-list">
+            ${opts.items.map(t=>`
+              <div class="stx-item">
+                ${t.icon?`<i class="fa-solid ${t.icon}"></i>`:''}
+                <div>${t.text||''}</div>
+              </div>`).join('')}
+          </div>`:''}
+        ${Array.isArray(opts.cta)&&opts.cta.length?`
+          <div class="stx-cta">
+            ${opts.cta.map(c=>`
+              <a class="stx-btn ${c.ghost?'stx-btn--ghost':''}" ${c.href?`href="${c.href}" target="_blank" rel="noopener"`:''}>
+                ${c.icon?`<i class="fa-solid ${c.icon}"></i>`:''}${c.text||''}
+              </a>`).join('')}
+          </div>`:''}
+      </div>
+    </div>`;
+  document.body.appendChild(o);
+
+  const close = () => { o.style.display='none'; o.remove(); sessionStorage.setItem(KEY,'1'); };
+  o.querySelector('.stx-close').addEventListener('click', close);
+  o.addEventListener('click', e=>{ if(e.target===o) close(); });
+
+  o.style.display = 'flex';
+  if (opts.timeout) setTimeout(close, Number(opts.timeout));
+}
+
+specialThanksV2({
+  key: 'thanks-global',
+  title: 'Special Thanks',
+  message: 'Terima kasih untuk dukungan & kontribusi yang membuat panel ini berjalan.',
+  items: [
+    { icon:'fa-crown', text:'Vinzz', href:'https://t.me/vinzznyabobo' },
+    { icon:'fa-solid fa-people-group', text:'Spaceman invictus' },
+    { icon:'fa-solid fa-person', text:'Vann (beban)', href:'https://t.me/vann4you1' },
+    { icon:'fa-people-group', text:'All Contributors & Buyers' }
+  ],
+  cta: [
+    { icon:'fa-paper-plane', text:'Telegram Channel', href:'https://t.me/spcinformation' },
+    { icon:'fa-crown', text:'Contact Owner', href:'https://t.me/vinzznyabobo', ghost:true }
+  ],
+  timeout: 5000
+});
+
+    	const BUY_LINK = 'https://t.me/vinzznyabobo'; // ganti link
+const buyBtn = document.getElementById('buyAccessBtn');
+if (buyBtn) {
+  buyBtn.addEventListener('click', () => {
+    window.open(BUY_LINK, '_blank');
+  });
+}
+        // Memeriksa apakah pengguna sudah login saat halaman dimuat
+        if (localStorage.getItem('authToken')) {
+            window.location.href = '/dashboard';
+        }
+// === INSERT: helper deviceId ===
+const getDeviceId = () => {
+  const KEY = 'device_id';
+  let id = localStorage.getItem(KEY);
+  if (!id) {
+    id = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+      (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> (c / 4)).toString(16)
+    );
+    localStorage.setItem(KEY, id);
+  }
+  return id;
+};
+        // Penanganan submit form login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Mencegah refresh halaman
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const resultDiv = document.getElementById('result');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            // Validasi input sederhana di sisi klien
+            if (!username || !password) {
+                showResult('❌ Username dan password tidak boleh kosong.', 'error');
+                return;
+            }
+
+            // Tampilkan status loading pada tombol
+            loginBtn.innerHTML = '<span class="loading"></span><i class="fa-solid fa-spinner fa-spin"></i> AUTHENTICATING...'; // Menambah ikon spinner
+            loginBtn.disabled = true; // Nonaktifkan tombol saat loading
+            resultDiv.style.display = 'none'; // Sembunyikan pesan hasil sebelumnya
+
+            try {
+                const deviceId = getDeviceId(); // NEW
+const response = await fetch('/api/login', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ username, password, deviceId }) // NEW: kirim deviceId
+});
+// tangani device-lock dari server
+if (response.status === 403) {
+  showResult('❌ Akun ini sudah terikat ke device lain.', 'error');
+  loginBtn.disabled = false;
+  loginBtn.innerHTML = '<i class="fa-solid fa-rocket"></i> ACCESS PREMIUM PANEL';
+  return;
+}
+if (response.status === 423) {
+  showResult('❌ Device belum terikat. Silakan login ulang.', 'error');
+  location.href = '/';
+  return;
+}
+const data = await response.json();
+
+if (data.success) {
+  localStorage.setItem('authToken', data.token);
+  localStorage.setItem('userInfo', JSON.stringify(data.user));
+  localStorage.setItem('device_id', deviceId); // NEW: simpan deviceId
+                    showResult('✅ <i class="fa-solid fa-check-circle"></i> Login berhasil! Mengarahkan ke dashboard...', 'success'); // Menambah ikon check
+                    
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 1500);
+                } else {
+                    showResult(`❌ <i class="fa-solid fa-times-circle"></i> ${data.message}`, 'error'); // Menambah ikon times
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showResult('❌ <i class="fa-solid fa-exclamation-triangle"></i> Terjadi kesalahan jaringan. Silakan coba lagi.', 'error'); // Menambah ikon warning
+            } finally {
+                setTimeout(() => {
+                    loginBtn.innerHTML = '<i class="fa-solid fa-rocket"></i> ACCESS PREMIUM PANEL'; // Mengembalikan ikon roket
+                    loginBtn.disabled = false;
+                }, 2000);
+            }
+        });
+
+        // Fungsi untuk menampilkan pesan hasil (sukses/error)
+        function showResult(message, type) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = message;
+            resultDiv.className = `result ${type}`;
+            resultDiv.style.display = 'block';
+        }
+
+        // Auto-fill kredensial demo saat mengklik teks akun demo
+        document.querySelectorAll('.demo-user-pass').forEach(span => {
+            span.addEventListener('click', function() {
+                const usernameInput = document.getElementById('username');
+                const passwordInput = document.getElementById('password');
+
+                usernameInput.value = this.dataset.user;
+                passwordInput.value = this.dataset.pass;
+                
+                this.style.backgroundColor = 'rgba(76, 175, 80, 0.3)';
+                setTimeout(() => {
+                    this.style.backgroundColor = '';
+                }, 300);
+
+                usernameInput.focus();
+            });
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+            
+            if (e.key === 'Escape') {
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+                document.getElementById('result').style.display = 'none';
+                document.getElementById('username').focus();
+            }
+        });
+
+        // Peningkatan keamanan di sisi klien (tidak mutlak, tapi dapat menghambat)
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12' || 
+                (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                (e.ctrlKey && e.key === 'U')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        document.addEventListener('selectstart', function(e) {
+            if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
+                e.preventDefault();
+            }
+        });
+
+        // Menambahkan efek fokus pada parent form-group
+        document.querySelectorAll('.form-group input').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.closest('.form-group').style.transform = 'scale(1.02)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.closest('.form-group').style.transform = 'scale(1)';
+            });
+        });
+
+        if ('scrollBehavior' in document.documentElement.style) {
+            document.documentElement.style.scrollBehavior = 'smooth';
+        }
+
+        // Music Player Functionality
+        const musicToggle = document.getElementById('musicToggle');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const musicIcon = document.getElementById('musicIcon');
+        let isPlaying = false;
+
+        // Set default volume
+        backgroundMusic.volume = 0.3;
+
+        musicToggle.addEventListener('click', function() {
+            if (isPlaying) {
+                backgroundMusic.pause();
+                musicIcon.className = 'fa-solid fa-play';
+                musicToggle.classList.remove('playing');
+                musicToggle.title = 'Play Music';
+                isPlaying = false;
+                localStorage.setItem('musicPlaying', 'false');
+            } else {
+                backgroundMusic.play().then(() => {
+                    musicIcon.className = 'fa-solid fa-pause';
+                    musicToggle.classList.add('playing');
+                    musicToggle.title = 'Pause Music';
+                    isPlaying = true;
+                    localStorage.setItem('musicPlaying', 'true');
+                }).catch(error => {
+                    console.log('Music playback failed:', error);
+                });
+            }
+        });
+
+        // Restore music state from localStorage
+        window.addEventListener('load', function() {
+            const musicState = localStorage.getItem('musicPlaying');
+            if (musicState === 'true') {
+                backgroundMusic.play().then(() => {
+                    musicIcon.className = 'fa-solid fa-pause';
+                    musicToggle.classList.add('playing');
+                    musicToggle.title = 'Pause Music';
+                    isPlaying = true;
+                }).catch(error => {
+                    console.log('Auto-play failed:', error);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

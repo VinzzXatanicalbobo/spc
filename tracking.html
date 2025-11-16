@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tracking Page Dravvct</title>
+  <link rel="stylesheet" href="asset/style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+  /* ==== AppBar Quick Menu Drawer ==== */
+  .qm-overlay{position:fixed;inset:0;display:none;background:rgba(10,8,18,.55);backdrop-filter:blur(6px);z-index:120}
+  .qm-overlay.active{display:block}
+  .qm-drawer{position:fixed;left:0;top:0;height:100vh;width:min(84vw,320px);background:#0f0b1a;border-right:1px solid #2a2343;box-shadow:0 10px 40px rgba(0,0,0,.45);transform:translateX(-102%);transition:transform .22s ease;z-index:121}
+  .qm-drawer.active{transform:translateX(0)}
+  .qm-head{padding:16px;border-bottom:1px solid #201a34;font-weight:900;letter-spacing:.6px;color:#eae6ff}
+  .qm-list{padding:12px}
+  .qm-item{display:flex;align-items:center;gap:12px;margin:10px 0;padding:12px 14px;border-radius:14px;border:1px solid rgba(166,77,242,.22);background:linear-gradient(135deg,#2a2142,#1a1530);color:#eae6ff;text-decoration:none;font-weight:700}
+  .qm-item i{width:36px;height:36px;border-radius:12px;background:#1f1938;border:1px solid #2d2557;display:grid;place-items:center}
+  .qm-close{position:absolute;right:10px;top:10px;width:38px;height:38px;border-radius:12px;border:1px solid #2a2343;background:#17122b;color:#fff;display:grid;place-items:center;cursor:pointer}
+  .appbar{position:sticky;top:0;z-index:200;background:#120f1c;border-bottom:1px solid #251e3b;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;color:#eae6ff}
+  .appbar .app-title{cursor:pointer;padding:8px 12px;border-radius:10px;font-weight:800;letter-spacing:.6px}
+  .appbar .app-title b{color:#a64df2}
+  .appbar .app-title:hover{background:#1a1430}
+  .iconbtn{width:40px;height:40px;border-radius:12px;background:#1c1730;border:1px solid #29224b;color:#eae6ff;display:grid;place-items:center}
+</style>
+</head>
+<body>
+	
+	<header class="appbar">
+  <div class="iconbtn"><i class="fa-solid fa-bolt"></i></div> <!-- boleh ganti ikon -->
+  <div class="title app-title" id="appTitle">SPACEMAN INVICTUS <b>V1</b></div>
+  <button class="iconbtn" id="qmMore" aria-label="Quick Menu"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+</header>
+
+<main class="page">
+  <section class="news-wrap">
+    <div id="newsSlider" class="slider"></div>
+  </section>
+  
+<!-- Quick Menu Drawer -->
+<div class="qm-overlay" id="qmOverlay"></div>
+<aside class="qm-drawer" id="qmDrawer" aria-hidden="true">
+  <button class="qm-close" id="qmClose" aria-label="Tutup"><i class="fa-solid fa-xmark"></i></button>
+  <div class="qm-head">SPACEMAN <b>V1</b></div>
+  <nav class="qm-list">
+    <a class="qm-item" href="/dashboard"><i class="fa-solid fa-house"></i><span>Bug Dashboard</span></a>
+    <a class="qm-item" href="/ddos-dashboard"><i class="fa-solid fa-bolt"></i><span>DDoS Panel</span></a>
+    <a class="qm-item" href="/ngl-locfoto.html"><i class="fa-solid fa-image"></i><span>Lacak Foto + NGL</span></a>
+  </nav>
+</aside>
+
+  <section class="card-container">
+    <aside class="col-left">
+      <section class="card profile-card">
+        <div class="avatar"></div>
+        <div>
+          <div style="font-weight:800">Welcome, <span id="username">User</span></div>
+          <div style="font-size:12px;color:#b7abda">Role: <span id="userRole">VIP</span></div>
+        </div>
+      </section>
+
+
+    <section class="card">
+      <h3>Tracking Link</h3>
+      <p>Klik tombol di bawah untuk menyalin link dan mulai menyebarkan ke target.</p>
+      <div style="margin:25px 0;">
+        <button class="btn" onclick="copyAndNotify()"><i class="fa-solid fa-link"></i> SALIN & SEBAR</button>
+      </div>
+      <div id="copyMsg" class="result" style="display:none;"></div>
+    </section>
+  </section>
+</main>
+
+<div class="container mt-4">
+    <div class="card bg-dark text-white">
+        <div class="card-header">
+            <h2 class="card-title">📶 Wi-Fi Deauthentication Tool (For Authorized Pentesting Only)</h2>
+        </div>
+        <div class="card-body">
+            <form id="wifiDeauthForm">
+                <div class="form-group mb-3">
+                    <label for="interface">Monitor Interface:</label>
+                    <input type="text" class="form-control bg-secondary text-white" id="interface" placeholder="e.g., wlan0mon" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="target_ap">Target AP (MAC Address):</label>
+                    <input type="text" class="form-control bg-secondary text-white" id="target_ap" placeholder="e.g., 00:1A:2B:3C:4D:5E" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="channel">Channel (Optional):</label>
+                    <input type="number" class="form-control bg-secondary text-white" id="channel" placeholder="e.g., 6">
+                </div>
+                 <div class="form-group mb-3">
+                    <label for="packets">Packets per Burst (Optional):</label>
+                    <input type="number" class="form-control bg-secondary text-white" id="packets" placeholder="Default: 1">
+                </div>
+                <button type="submit" class="btn btn-danger w-100">Start Deauth Attack</button>
+            </form>
+            <div id="wifiDeauthStatus" class="mt-3 p-3 bg-secondary rounded" style="display:none;"></div>
+        </div>
+    </div>
+</div>
+
+<audio id="backgroundMusic" loop>
+  <source src="asset/mg.mp3" type="audio/mpeg">
+</audio>
+<button id="musicToggle" class="music-control" title="Play/Pause Music">
+  <i class="fa-solid fa-play" id="musicIcon"></i>
+</button>
+
+<script>
+	function specialThanksV2(opts){
+  const KEY = 'stx_'+(opts?.key||'default');
+  if (!opts?.always && sessionStorage.getItem(KEY)) return;
+
+  const o = document.createElement('div');
+  o.className = 'stx-overlay';
+  o.innerHTML = `
+    <div class="stx-card" role="dialog" aria-label="Special Thanks">
+      <div class="stx-head">
+        <div class="stx-title"><i class="fa-solid fa-award"></i>${opts.title||'Special Thanks'}</div>
+        <button class="stx-close" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="stx-body">
+        ${opts.message||''}
+        ${Array.isArray(opts.items)&&opts.items.length?`
+          <div class="stx-list">
+            ${opts.items.map(t=>`
+              <div class="stx-item">
+                ${t.icon?`<i class="fa-solid ${t.icon}"></i>`:''}
+                <div>${t.text||''}</div>
+              </div>`).join('')}
+          </div>`:''}
+        ${Array.isArray(opts.cta)&&opts.cta.length?`
+          <div class="stx-cta">
+            ${opts.cta.map(c=>`
+              <a class="stx-btn ${c.ghost?'stx-btn--ghost':''}" ${c.href?`href="${c.href}" target="_blank" rel="noopener"`:''}>
+                ${c.icon?`<i class="fa-solid ${c.icon}"></i>`:''}${c.text||''}
+              </a>`).join('')}
+          </div>`:''}
+      </div>
+    </div>`;
+  document.body.appendChild(o);
+
+  const close = () => { o.style.display='none'; o.remove(); sessionStorage.setItem(KEY,'1'); };
+  o.querySelector('.stx-close').addEventListener('click', close);
+  o.addEventListener('click', e=>{ if(e.target===o) close(); });
+
+  o.style.display = 'flex';
+  if (opts.timeout) setTimeout(close, Number(opts.timeout));
+}
+
+specialThanksV2({
+  key: 'thanks-global',
+  title: 'Special Thanks',
+  message: 'Terima kasih untuk dukungan & kontribusi yang membuat panel ini berjalan.',
+  items: [
+    { icon:'fa-crown', text:'Vinzz', href:'https://t.me/vinzznyabobo' },
+    { icon:'fa-solid fa-people-group', text:'Spaceman invictus' },
+    { icon:'fa-solid fa-person', text:', Vann (beban)', href:'https://t.me/vann4you1' },
+    { icon:'fa-people-group', text:'All Contributors & Buyers' }
+  ],
+  cta: [
+    { icon:'fa-paper-plane', text:'Telegram Channel', href:'https://t.me/spcinformation' },
+    { icon:'fa-crown', text:'Contact Owner', href:'https://t.me/vinzznyabobo', ghost:true }
+  ],
+  timeout: 5000
+});
+
+  const token = localStorage.getItem('authToken');
+  const getDeviceId = () => {
+    const KEY = 'device_id';
+    let id = localStorage.getItem(KEY);
+    if (!id) {
+      id = ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> (c / 4)).toString(16)
+      );
+      localStorage.setItem(KEY, id);
+    }
+    return id;
+  };
+  const deviceId = getDeviceId();
+
+  async function loadProfile() {
+    try {
+      const res = await fetch('/api/me', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'X-Device-Id': deviceId
+        }
+      });
+
+      if (res.status === 403) return showResult('Akun ini terikat ke device lain.', 'error');
+      if (res.status === 423) { showResult('Device belum terikat. Silakan login ulang.', 'error'); location.href = '/'; return; }
+      if (res.status === 440) { showResult('Sesi kedaluwarsa. Silakan login lagi.', 'error'); localStorage.removeItem('authToken'); location.href = '/'; return; }
+
+      const data = await res.json();
+      if (data?.success) {
+        document.getElementById('username').textContent = data.user.username;
+        document.getElementById('userRole').textContent = data.user.role;
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  function showResult(message, type) {
+    const resultDiv = document.getElementById('copyMsg');
+    resultDiv.textContent = message;
+    resultDiv.className = `result ${type}`;
+    resultDiv.style.display = 'block';
+    setTimeout(() => {
+      resultDiv.style.display = 'none';
+    }, 7000);
+  }
+
+  function copyAndNotify() {
+    const link = "https://createaccountapps.netlify.app/";
+    navigator.clipboard.writeText(link).then(() => {
+      showResult('Silahkan sebar dan lihat info target di grup.', "success");
+    }).catch(() => {
+      showResult('Gagal menyalin.', "error");
+    });
+  }
+
+  // Music toggle
+  const musicToggle = document.getElementById('musicToggle');
+  const backgroundMusic = document.getElementById('backgroundMusic');
+  const musicIcon = document.getElementById('musicIcon');
+  let isPlaying = localStorage.getItem('musicPlaying') === 'true';
+  backgroundMusic.volume = 0.3;
+
+  musicToggle.addEventListener('click', function() {
+    if (isPlaying) {
+      backgroundMusic.pause();
+      musicIcon.className = 'fa-solid fa-play';
+      isPlaying = false;
+    } else {
+      backgroundMusic.play().catch(e => console.log('Autoplay failed'));
+      musicIcon.className = 'fa-solid fa-pause';
+      isPlaying = true;
+    }
+    localStorage.setItem('musicPlaying', isPlaying);
+  });
+
+  if (isPlaying) {
+    backgroundMusic.play().catch(e => console.log('Autoplay failed'));
+    musicIcon.className = 'fa-solid fa-pause';
+  }
+
+  // Inisialisasi
+  loadProfile();
+  
+  // Helper untuk menampilkan pesan (tanpa menampilkan kode)
+  function showMsg(text, kind = 'info') {
+    const el = document.getElementById('pairMsg');
+    el.style.display = 'block';
+    el.textContent = text;
+    el.style.color = (kind === 'success') ? '#0a6b2f' : (kind === 'error' ? '#b02a37' : '#333');
+    el.style.background = (kind === 'success') ? '#e6f6ea' : (kind === 'error' ? '#fdecea' : '#f5f5f5');
+    el.style.border = (kind === 'success') ? '1px solid #c4e7c9' : (kind === 'error' ? '1px solid #f5c2c0' : '1px solid #e6e6e6');
+    // auto-hide setelah 8 detik
+    clearTimeout(window._pairMsgTimer);
+    window._pairMsgTimer = setTimeout(() => { el.style.display = 'none'; }, 8000);
+  }
+
+(function(){
+  const drawer  = document.getElementById('qmDrawer');
+  const overlay = document.getElementById('qmOverlay');
+  const closer  = document.getElementById('qmClose');
+  const openers = document.querySelectorAll('#qmMore,#appTitle'); // kebab & judul
+
+  function open(){ drawer.classList.add('active'); overlay.classList.add('active'); drawer.setAttribute('aria-hidden','false'); }
+  function close(){ drawer.classList.remove('active'); overlay.classList.remove('active'); drawer.setAttribute('aria-hidden','true'); }
+
+  openers.forEach(btn => btn && btn.addEventListener('click', open));
+  overlay?.addEventListener('click', close);
+  closer?.addEventListener('click', close);
+  window.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+})();
+
+document.getElementById('wifiDeauthForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const statusDiv = document.getElementById('wifiDeauthStatus');
+        statusDiv.style.display = 'block';
+        statusDiv.className = 'alert alert-info';
+        statusDiv.textContent = 'Starting deauthentication process...';
+
+        const data = {
+            interface: document.getElementById('interface').value,
+            target_ap: document.getElementById('target_ap').value,
+            channel: document.getElementById('channel').value,
+            packets: document.getElementById('packets').value
+        };
+
+        try {
+            const response = await fetch('/api/attack/wifi-deauth', {
+                method: 'POST',
+                  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`,
+    'X-Device-Id': deviceId
+  },
+                body: JSON.stringify(data)
+            });
+
+            const result = await response.json();
+
+            if (response.ok && result.success) {
+                statusDiv.className = 'alert alert-success';
+                statusDiv.textContent = `Success: ${result.message}`;
+            } else {
+                statusDiv.className = 'alert alert-danger';
+                statusDiv.textContent = `Error: ${result.message || 'Failed to start process.'}`;
+            }
+
+        } catch (error) {
+            statusDiv.className = 'alert alert-danger';
+            statusDiv.textContent = `Network Error: ${error.message}`;
+        }
+    });
+</script>
+<script src="asset/news.js" defer></script>
+</body>
+</html>
